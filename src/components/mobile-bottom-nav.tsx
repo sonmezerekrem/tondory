@@ -6,6 +6,7 @@ import { DashboardSquare02Icon,BookmarkAdd01Icon, BookOpen01Icon, Settings02Icon
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { useModal } from '@/contexts/modal-context'
 
 const navigation = [
   { 
@@ -40,6 +41,7 @@ const navigation = [
 
 export function MobileBottomNav() {
   const pathname = usePathname()
+  const { openAddBlogPostModal } = useModal()
 
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-t border-border/60">
@@ -51,14 +53,14 @@ export function MobileBottomNav() {
           
           if (item.isAction) {
             return (
-              <Link key={item.name} href={item.href}>
-                <Button
-                  size="sm"
-                  className="w-12 h-12 rounded-full bg-primary hover:bg-primary/90 shadow-lg"
-                >
-                  <HugeiconsIcon icon={item.icon} size={36} className="text-white" />
-                </Button>
-              </Link>
+              <Button
+                key={item.name}
+                size="sm"
+                className="w-12 h-12 rounded-full bg-primary hover:bg-primary/90 shadow-lg"
+                onClick={() => openAddBlogPostModal()}
+              >
+                <HugeiconsIcon icon={item.icon} size={36} className="text-white" />
+              </Button>
             )
           }
           

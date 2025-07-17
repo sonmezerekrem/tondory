@@ -5,10 +5,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { PlusSignIcon, Search01Icon, Grid02Icon, Menu02Icon, FilterIcon } from '@hugeicons/core-free-icons'
-import { AddBlogPostModal } from '@/components/add-blog-post-modal'
 import { BlogPostCard } from '@/components/blog-post-card'
 import { BlogPostListItem } from '@/components/blog-post-list-item'
 import { cn } from '@/lib/utils'
+import { useModal } from '@/contexts/modal-context'
 
 interface BlogPost {
   id: string
@@ -28,9 +28,15 @@ export default function BlogPostsPage() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [searchQuery, setSearchQuery] = useState('')
+  const { openAddBlogPostModal } = useModal()
+
+  const handlePostAdded = (newPost: any) => {
+    const postWithBookmark = { ...newPost, isBookmarked: false }
+    setBlogPosts([postWithBookmark, ...blogPosts])
+    setFilteredPosts([postWithBookmark, ...filteredPosts])
+  }
 
   const fetchBlogPosts = async () => {
     try {
@@ -68,12 +74,6 @@ export default function BlogPostsPage() {
     }
   }, [searchQuery, blogPosts])
 
-  const handlePostAdded = (newPost: BlogPost) => {
-    const postWithBookmark = { ...newPost, isBookmarked: false }
-    setBlogPosts([postWithBookmark, ...blogPosts])
-    setFilteredPosts([postWithBookmark, ...filteredPosts])
-    setIsModalOpen(false)
-  }
 
   const handleBookmarkToggle = (postId: string) => {
     const updatedPosts = blogPosts.map(post =>
@@ -103,7 +103,7 @@ export default function BlogPostsPage() {
           </div>
           <Button 
             className="bg-primary text-white hover:bg-primary/90 rounded-xl px-6"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => openAddBlogPostModal(handlePostAdded)}
           >
             <HugeiconsIcon icon={PlusSignIcon} size={16} className="mr-2" />
             Add Article
@@ -223,7 +223,7 @@ export default function BlogPostsPage() {
           {!searchQuery && (
             <Button 
               className="bg-primary text-white hover:bg-primary/90"
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => openAddBlogPostModal(handlePostAdded)}
             >
               <HugeiconsIcon icon={PlusSignIcon} size={16} className="mr-2" />
               Add Your First Article
@@ -257,12 +257,6 @@ export default function BlogPostsPage() {
         </div>
       )}
 
-      {/* Add Article Modal */}
-      <AddBlogPostModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onPostAdded={handlePostAdded}
-      />
     </div>
   )
 }
