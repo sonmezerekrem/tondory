@@ -184,16 +184,35 @@ export default function BlogPostsPage() {
       {loading ? (
         <div className={cn(
           viewMode === 'grid' 
-            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" 
-            : "space-y-4"
+            ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6" 
+            : "divide-y divide-border/30"
         )}>
-          {[...Array(6)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <div key={i} className={cn(
-              "animate-pulse rounded-xl",
+              "animate-pulse",
               viewMode === 'grid' 
-                ? "bg-secondary/30 aspect-[4/5]" 
-                : "bg-secondary/30 h-24"
-            )}></div>
+                ? "space-y-3" 
+                : "py-3 flex items-start space-x-3"
+            )}>
+              {viewMode === 'grid' ? (
+                <>
+                  <div className="bg-secondary/30 aspect-[16/10] rounded-xl"></div>
+                  <div className="space-y-2">
+                    <div className="bg-secondary/30 h-4 rounded"></div>
+                    <div className="bg-secondary/30 h-3 w-3/4 rounded"></div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="bg-secondary/30 w-16 h-16 rounded-lg flex-shrink-0"></div>
+                  <div className="flex-1 space-y-1">
+                    <div className="bg-secondary/30 h-4 rounded"></div>
+                    <div className="bg-secondary/30 h-3 w-2/3 rounded"></div>
+                  </div>
+                  <div className="bg-secondary/30 w-8 h-8 rounded-full flex-shrink-0"></div>
+                </>
+              )}
+            </div>
           ))}
         </div>
       ) : filteredPosts.length === 0 ? (
@@ -224,8 +243,8 @@ export default function BlogPostsPage() {
         <div className={cn(
           "transition-all duration-300",
           viewMode === 'grid' 
-            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6" 
-            : "space-y-4"
+            ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6" 
+            : "divide-y divide-border/30"
         )}>
           {filteredPosts.map((post) => (
             viewMode === 'grid' ? (

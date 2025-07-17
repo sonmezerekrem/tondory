@@ -1,6 +1,4 @@
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { BookmarkAdd01Icon, BookmarkRemove01Icon, Link02Icon } from '@hugeicons/core-free-icons'
 import { cn } from '@/lib/utils'
@@ -32,9 +30,12 @@ export function BlogPostCard({ post, onBookmarkToggle, className }: BlogPostCard
   }
 
   return (
-    <Card className={cn("card-shadow hover:card-shadow-lg transition-all duration-300 border-0 bg-card/80 backdrop-blur-sm overflow-hidden group p-0 gap-0", className)}>
+    <div 
+      className={cn("group cursor-pointer", className)}
+      onClick={() => window.open(post.url, '_blank')}
+    >
       {/* Article Image */}
-      <div className="relative aspect-[16/9] overflow-hidden">
+      <div className="relative aspect-[16/10] overflow-hidden rounded-xl mb-3">
         {post.image_url ? (
           <img
             src={post.image_url}
@@ -42,7 +43,7 @@ export function BlogPostCard({ post, onBookmarkToggle, className }: BlogPostCard
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+          <div className="w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center rounded-xl">
             <HugeiconsIcon icon={Link02Icon} size={32} className="text-muted-foreground" />
           </div>
         )}
@@ -51,12 +52,15 @@ export function BlogPostCard({ post, onBookmarkToggle, className }: BlogPostCard
         <Button
           variant="ghost"
           size="sm"
-          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 transition-all"
-          onClick={() => onBookmarkToggle?.(post.id)}
+          className="absolute top-2 right-2 w-8 h-8 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background transition-all"
+          onClick={(e) => {
+            e.stopPropagation()
+            onBookmarkToggle?.(post.id)
+          }}
         >
           <HugeiconsIcon 
             icon={post.isBookmarked ? BookmarkRemove01Icon : BookmarkAdd01Icon} 
-            size={16} 
+            size={14} 
             className={cn(
               "transition-colors",
               post.isBookmarked ? "text-accent" : "text-muted-foreground"
@@ -65,37 +69,19 @@ export function BlogPostCard({ post, onBookmarkToggle, className }: BlogPostCard
         </Button>
       </div>
 
-      <CardContent className="p-4 space-y-3">
+      {/* Content */}
+      <div className="space-y-2">
         {/* Title */}
-        <h3 className="font-semibold text-lg line-clamp-2 text-foreground group-hover:text-primary transition-colors">
+        <h3 className="font-semibold text-base line-clamp-2 text-foreground group-hover:text-primary transition-colors leading-tight">
           {post.title || 'Untitled Article'}
         </h3>
 
-        {/* Author and Date */}
-        <div className="flex items-center space-x-3">
-          <div className="flex-1 min-w-0">
-            
-            <p className="text-xs text-muted-foreground">
-              {formatDate(post.read_date)}
-            </p>
-          </div>
-          {post.site_name && (
-            <Badge variant="secondary" className="text-xs">
-              {post.site_name}
-            </Badge>
-          )}
+        {/* Metadata */}
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <span>{post.site_name || 'Unknown Source'}</span>
+          <span>{formatDate(post.read_date)}</span>
         </div>
-
-        {/* Open Link Button */}
-        <Button
-          variant="outline"
-          className="w-full justify-center h-9 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/60 transition-all"
-          onClick={() => window.open(post.url, '_blank')}
-        >
-          <HugeiconsIcon icon={Link02Icon} size={16} className="mr-2" />
-          Read Article
-        </Button>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
