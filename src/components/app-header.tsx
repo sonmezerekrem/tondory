@@ -1,10 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { BookOpen01Icon, Search01Icon, Menu01Icon, Logout01Icon, User02Icon } from '@hugeicons/core-free-icons'
+import { BookOpen01Icon, Search01Icon, User02Icon } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 
 interface AppHeaderProps {
@@ -57,15 +56,9 @@ export function AppHeader({ user }: AppHeaderProps) {
                   <p className="text-sm font-medium text-foreground">
                     {user.email?.split('@')[0]}
                   </p>
-                  <p className="text-xs text-muted-foreground">Reader</p>
                 </div>
               </div>
               
-              <form action="/auth/logout" method="post">
-                <Button variant="ghost" size="sm" type="submit" className="text-muted-foreground hover:text-foreground">
-                  <HugeiconsIcon icon={Logout01Icon} size={16} />
-                </Button>
-              </form>
             </div>
           </div>
         </div>
