@@ -80,11 +80,8 @@ export function BlogPostCard({ post, onBookmarkToggle, className }: BlogPostCard
 
         {/* Author and Date */}
         <div className="flex items-center space-x-3">
-          <AuthorAvatar name={getAuthorName(post.site_name)} size="sm" />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground truncate">
-              {getAuthorName(post.site_name)}
-            </p>
+            
             <p className="text-xs text-muted-foreground">
               {formatDate(post.read_date)}
             </p>

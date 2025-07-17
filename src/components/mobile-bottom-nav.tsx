@@ -1,9 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { DashboardSquare02Icon, BookOpen01Icon, Settings02Icon, PlusSignIcon } from '@hugeicons/core-free-icons'
+import { DashboardSquare02Icon,BookmarkAdd01Icon, BookOpen01Icon, Settings02Icon, PlusSignIcon } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -25,6 +24,12 @@ const navigation = [
     href: '/app/blog-posts', 
     icon: PlusSignIcon,
     isAction: true
+  },
+    { 
+    name: 'Bookmarks', 
+    href: '/app/bookmarks', 
+    icon: BookmarkAdd01Icon,
+    disabled: true
   },
   { 
     name: 'Settings', 
@@ -51,15 +56,17 @@ export function MobileBottomNav() {
                   size="sm"
                   className="w-12 h-12 rounded-full bg-primary hover:bg-primary/90 shadow-lg"
                 >
-                  <HugeiconsIcon icon={item.icon} size={20} className="text-white" />
+                  <HugeiconsIcon icon={item.icon} size={36} className="text-white" />
                 </Button>
               </Link>
             )
           }
           
           return (
-            <Link key={item.name} href={item.href} className="flex-1">
+            <Link key={item.name} 
+            href={item.disabled ? "#" : item.href} className="flex-1">
               <Button
+              disabled= {item.disabled}
                 variant="ghost"
                 className={cn(
                   "flex flex-col items-center space-y-1 h-auto py-2 w-full transition-colors",
@@ -82,9 +89,7 @@ export function MobileBottomNav() {
                 )}>
                   {item.name}
                 </span>
-                {isActive && (
-                  <div className="w-1 h-1 bg-primary rounded-full" />
-                )}
+            
               </Button>
             </Link>
           )

@@ -19,7 +19,8 @@ const navigation = [
   { 
     name: 'Blog Posts', 
     href: '/app/blog-posts', 
-    icon: BookOpen01Icon
+    icon: BookOpen01Icon,
+    badge: 'New'
   },
   { 
     name: 'Analytics', 
@@ -27,6 +28,12 @@ const navigation = [
     icon: ChartIncreaseIcon,
     disabled: true,
     badge: "Coming Soon"
+  },
+  { 
+    name: 'Bookmarks', 
+    href: '/app/bookmarks', 
+    icon: BookmarkAdd01Icon,
+    disabled: true
   },
   { 
     name: 'Settings', 
@@ -47,7 +54,6 @@ export function AppSidebar() {
         isCollapsed ? "w-16" : "w-64"
       )}>
         <div className="flex flex-col h-full">
-
           {/* Navigation */}
           <nav className="flex-1 p-4 space-y-1">
             {navigation.map((item) => {
@@ -87,28 +93,6 @@ export function AppSidebar() {
               )
             })}
           </nav>
-
-          {/* Stats Section */}
-          <div className="p-4 border-t border-border/60">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">
-                  {!isCollapsed ? "This Month" : ""}
-                </span>
-                {!isCollapsed && (
-                  <span className="text-sm font-bold text-primary">12</span>
-                )}
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">
-                  {!isCollapsed ? "Total Articles" : ""}
-                </span>
-                {!isCollapsed && (
-                  <span className="text-sm font-bold text-foreground">48</span>
-                )}
-              </div>
-            </div>
-          </div>
 
           {/* Collapse Button */}
           <div className="p-4 border-t border-border/60">
