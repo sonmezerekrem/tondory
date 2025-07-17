@@ -1,13 +1,13 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { DashboardSquare02Icon, Task01Icon, Settings02Icon } from '@hugeicons/core-free-icons'
+import { DashboardSquare02Icon, BookOpen01Icon, Settings02Icon } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
 const navigation = [
   { name: 'Dashboard', href: '/app', icon: DashboardSquare02Icon },
-  { name: 'Tasks', href: '/app/tasks', icon: Task01Icon },
+  { name: 'Blog Posts', href: '/app/blog-posts', icon: BookOpen01Icon },
   { name: 'Settings', href: '/app/settings', icon: Settings02Icon },
 ]
 

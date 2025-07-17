@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { PlusSignIcon } from '@hugeicons/core-free-icons'
+import Link from 'next/link'
 
 export default function TasksPage() {
   return (
@@ -10,23 +11,24 @@ export default function TasksPage() {
         <div>
           <h1 className="text-3xl font-bold">Tasks</h1>
           <p className="text-muted-foreground">
-            Manage your tasks and stay organized
+            This feature is coming soon! For now, you can manage your blog posts.
           </p>
         </div>
-        <Button>
-          <HugeiconsIcon icon={PlusSignIcon} size={16} className="mr-2" />
-          New Task
-        </Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Your Tasks</CardTitle>
-          <CardDescription>All your tasks in one place</CardDescription>
+          <CardTitle>Coming Soon</CardTitle>
+          <CardDescription>Task management functionality will be available in a future update</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8 text-muted-foreground">
-            No tasks yet. Create your first task to get started!
+            <p className="mb-4">Task management is not yet implemented.</p>
+            <Link href="/app/blog-posts">
+              <Button variant="outline">
+                Go to Blog Posts
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>
