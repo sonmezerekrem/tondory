@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { BookOpen01Icon, Calendar01Icon, ChartIncreaseIcon, PlusSignIcon, Fire03Icon, Link02Icon, ArrowRight01Icon, Clock01Icon } from '@hugeicons/core-free-icons'
+import { BookOpen01Icon, Calendar01Icon, ChartIncreaseIcon, PlusSignIcon, Fire03Icon, Link02Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 import { useModal } from '@/contexts/modal-context'
 
