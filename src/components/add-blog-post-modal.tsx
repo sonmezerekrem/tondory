@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Link02Icon, Calendar01Icon, Loading02Icon, Image01Icon } from '@hugeicons/core-free-icons'
 
@@ -127,34 +126,39 @@ export function AddBlogPostModal({ isOpen, onClose, onPostAdded }: AddBlogPostMo
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>Add Blog Post</DialogTitle>
-          <DialogDescription>
-            Enter the URL of a blog post you've read and we'll fetch the details for you.
+      <DialogContent className="sm:max-w-[500px] gap-6">
+        <DialogHeader className="space-y-2">
+          <DialogTitle className="text-xl font-bold">Add Article</DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
+            Enter the URL of an article you've read and we'll fetch the details for you.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="url">URL</Label>
+        <div className="space-y-6">
+          {/* URL Input */}
+          <div className="space-y-3">
+            <Label htmlFor="url" className="text-sm font-medium">Article URL</Label>
             <div className="relative">
-              <HugeiconsIcon icon={Link02Icon} size={16} className="absolute left-3 top-3 text-muted-foreground" />
+              <HugeiconsIcon 
+                icon={Link02Icon} 
+                size={18} 
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" 
+              />
               <Input
                 id="url"
                 type="url"
-                placeholder="https://example.com/blog-post"
+                placeholder="https://example.com/article"
                 value={url}
                 onChange={handleUrlChange}
-                className="pl-10"
+                className="pl-10 h-12 bg-background/50 border-border/30 focus:border-primary/50 focus:ring-primary/20 rounded-xl text-sm"
               />
             </div>
             <Button
               type="button"
-              variant="outline"
+              variant="ghost"
               onClick={fetchOpenGraph}
               disabled={!url.trim() || isLoading}
-              className="w-full"
+              className="w-full h-10 text-primary hover:bg-primary/10 border border-primary/30 hover:border-primary/60 rounded-xl transition-all"
             >
               {isLoading ? (
                 <>
@@ -167,69 +171,80 @@ export function AddBlogPostModal({ isOpen, onClose, onPostAdded }: AddBlogPostMo
             </Button>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="readDate">Read Date</Label>
+          {/* Date Input */}
+          <div className="space-y-3">
+            <Label htmlFor="readDate" className="text-sm font-medium">Read Date</Label>
             <div className="relative">
-              <HugeiconsIcon icon={Calendar01Icon} size={16} className="absolute left-3 top-3 text-muted-foreground" />
+              <HugeiconsIcon 
+                icon={Calendar01Icon} 
+                size={18} 
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" 
+              />
               <Input
                 id="readDate"
                 type="date"
                 value={readDate}
                 onChange={(e) => setReadDate(e.target.value)}
-                className="pl-10"
+                className="pl-10 h-12 bg-background/50 border-border/30 focus:border-primary/50 focus:ring-primary/20 rounded-xl text-sm"
               />
             </div>
           </div>
 
+          {/* Preview - Cardless Design */}
           {ogData && (
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Preview</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <div className="flex-1">
-                    <h4 className="font-medium line-clamp-2">
-                      {ogData.title || 'Untitled'}
-                    </h4>
+            <div className="space-y-3">
+              <h4 className="text-sm font-medium">Preview</h4>
+              <div className="p-4 bg-secondary/20 rounded-xl border border-border/30">
+                <div className="flex items-start space-x-3">
+                  {ogData.image && (
+                    <div className="flex-shrink-0">
+                      <img
+                        src={ogData.image}
+                        alt={ogData.title}
+                        className="w-16 h-16 object-cover rounded-lg"
+                      />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0 space-y-1">
+                    <h5 className="font-semibold text-sm line-clamp-2 text-foreground">
+                      {ogData.title || 'Untitled Article'}
+                    </h5>
                     {ogData.description && (
-                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                      <p className="text-xs text-muted-foreground line-clamp-2">
                         {ogData.description}
                       </p>
                     )}
-                    {ogData.siteName && (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {ogData.siteName}
-                      </p>
-                    )}
+                    <div className="flex items-center space-x-2 text-xs text-muted-foreground">
+                      {ogData.siteName && <span>{ogData.siteName}</span>}
+                    </div>
                   </div>
-                  {ogData.image && (
-                    <img
-                      src={ogData.image}
-                      alt={ogData.title}
-                      className="w-16 h-16 object-cover rounded"
-                    />
-                  )}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
+          {/* Error Message */}
           {error && (
-            <div className="text-sm text-red-500 bg-red-50 p-3 rounded-md">
-              {error}
+            <div className="p-3 bg-destructive/10 border border-destructive/30 rounded-xl">
+              <p className="text-sm text-destructive">{error}</p>
             </div>
           )}
         </div>
 
-        <DialogFooter>
-          <Button type="button" variant="outline" onClick={handleClose}>
+        <DialogFooter className="gap-3">
+          <Button 
+            type="button" 
+            variant="ghost" 
+            onClick={handleClose}
+            className="px-6 rounded-xl"
+          >
             Cancel
           </Button>
           <Button
             type="button"
             onClick={handleSave}
             disabled={!url.trim() || isSaving}
+            className="bg-primary text-white hover:bg-primary/90 px-6 rounded-xl"
           >
             {isSaving ? (
               <>
@@ -237,7 +252,7 @@ export function AddBlogPostModal({ isOpen, onClose, onPostAdded }: AddBlogPostMo
                 Saving...
               </>
             ) : (
-              'Save Blog Post'
+              'Save Article'
             )}
           </Button>
         </DialogFooter>
