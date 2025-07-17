@@ -55,7 +55,7 @@ export function BlogPostListItem({ post, onBookmarkToggle, className }: BlogPost
         {/* Content */}
         <div className="flex-1 min-w-0 space-y-1">
           {/* Title */}
-          <h3 className="font-semibold text-sm line-clamp-2 text-foreground group-hover:text-primary transition-colors leading-tight">
+          <h3 className="font-semibold text-sm sm:text-base line-clamp-2 text-foreground group-hover:text-primary transition-colors leading-tight">
             {post.title || 'Untitled Article'}
           </h3>
 
