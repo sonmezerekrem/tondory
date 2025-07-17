@@ -38,7 +38,7 @@ export function BlogPostListItem({ post, onBookmarkToggle, className }: BlogPost
 
   return (
     <div className={cn(
-      "p-4 rounded-xl bg-card/50 hover:bg-card/80 border border-border/40 hover:border-border/60 transition-all duration-300 group",
+      "p-2 rounded-xl bg-card/50 hover:bg-card/80 border border-border/40 hover:border-border/60 transition-all duration-300 group",
       className
     )}>
       <div className="flex items-start space-x-4">

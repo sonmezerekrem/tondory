@@ -10,34 +10,34 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
 const navigation = [
-  { 
-    name: 'Dashboard', 
-    href: '/app', 
+  {
+    name: 'Dashboard',
+    href: '/app',
     icon: DashboardSquare02Icon,
     exact: true
   },
-  { 
-    name: 'Blog Posts', 
-    href: '/app/blog-posts', 
+  {
+    name: 'Blog Posts',
+    href: '/app/blog-posts',
     icon: BookOpen01Icon,
-    badge: 'New'
   },
-  { 
-    name: 'Analytics', 
-    href: '/app/analytics', 
+  {
+    name: 'Analytics',
+    href: '/app/analytics',
     icon: ChartIncreaseIcon,
     disabled: true,
     badge: "Coming Soon"
   },
-  { 
-    name: 'Bookmarks', 
-    href: '/app/bookmarks', 
+  {
+    name: 'Bookmarks',
+    href: '/app/bookmarks',
     icon: BookmarkAdd01Icon,
-    disabled: true
+    disabled: true,
+    badge: "Coming Soon"
   },
-  { 
-    name: 'Settings', 
-    href: '/app/settings', 
+  {
+    name: 'Settings',
+    href: '/app/settings',
     icon: Settings02Icon
   },
 ]
@@ -57,18 +57,18 @@ export function AppSidebar() {
           {/* Navigation */}
           <nav className="flex-1 p-4 space-y-1">
             {navigation.map((item) => {
-              const isActive = item.exact 
-                ? pathname === item.href 
+              const isActive = item.exact
+                ? pathname === item.href
                 : pathname.startsWith(item.href)
-              
+
               return (
-                <Link key={item.name} href={item.href}>
+                <Link key={item.name} href={item.disabled ? "#" : item.href}>
                   <Button
                     variant="ghost"
                     className={cn(
                       "w-full justify-start h-10 font-medium transition-colors relative",
-                      isActive 
-                        ? "bg-primary/10 text-primary hover:bg-primary/20" 
+                      isActive
+                        ? "bg-primary/10 text-primary hover:bg-primary/20"
                         : "text-muted-foreground hover:text-foreground hover:bg-secondary/80",
                       item.disabled && "opacity-50 cursor-not-allowed"
                     )}
@@ -102,9 +102,9 @@ export function AppSidebar() {
               className="w-full justify-center"
               onClick={() => setIsCollapsed(!isCollapsed)}
             >
-              <HugeiconsIcon 
-                icon={isCollapsed ? DashboardSquare02Icon : DashboardSquare02Icon} 
-                size={16} 
+              <HugeiconsIcon
+                icon={isCollapsed ? DashboardSquare02Icon : DashboardSquare02Icon}
+                size={16}
               />
             </Button>
           </div>
@@ -118,7 +118,7 @@ export function AppSidebar() {
             {/* Quick Actions */}
             <div className="p-4 border-b border-border/60">
               <Link href="/app/blog-posts">
-                <Button 
+                <Button
                   className="w-full bg-primary text-white hover:bg-primary/90 shadow-sm justify-start"
                   size="sm"
                 >
@@ -131,18 +131,18 @@ export function AppSidebar() {
             {/* Navigation */}
             <nav className="flex-1 p-4 space-y-1">
               {navigation.map((item) => {
-                const isActive = item.exact 
-                  ? pathname === item.href 
+                const isActive = item.exact
+                  ? pathname === item.href
                   : pathname.startsWith(item.href)
-                
+
                 return (
                   <Link key={item.name} href={item.href}>
                     <Button
                       variant="ghost"
                       className={cn(
                         "w-full justify-start h-10 font-medium transition-colors relative",
-                        isActive 
-                          ? "bg-primary/10 text-primary hover:bg-primary/20" 
+                        isActive
+                          ? "bg-primary/10 text-primary hover:bg-primary/20"
                           : "text-muted-foreground hover:text-foreground hover:bg-secondary/80",
                         item.disabled && "opacity-50 cursor-not-allowed"
                       )}

@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { BookmarkAdd01Icon, BookmarkRemove01Icon, Link02Icon } from '@hugeicons/core-free-icons'
-import { AuthorAvatar } from '@/components/author-avatar'
 import { cn } from '@/lib/utils'
 
 interface BlogPost {
@@ -32,16 +31,10 @@ export function BlogPostCard({ post, onBookmarkToggle, className }: BlogPostCard
     })
   }
 
-  const getAuthorName = (siteName: string) => {
-    // Extract a reasonable author name from site name
-    if (!siteName) return 'Unknown'
-    return siteName.replace(/\.com|\.org|\.net/g, '').split('.')[0]
-  }
-
   return (
-    <Card className={cn("card-shadow hover:card-shadow-lg transition-all duration-300 border-0 bg-card/80 backdrop-blur-sm overflow-hidden group", className)}>
+    <Card className={cn("card-shadow hover:card-shadow-lg transition-all duration-300 border-0 bg-card/80 backdrop-blur-sm overflow-hidden group p-0 gap-0", className)}>
       {/* Article Image */}
-      <div className="relative aspect-[16/10] overflow-hidden">
+      <div className="relative aspect-[16/9] overflow-hidden">
         {post.image_url ? (
           <img
             src={post.image_url}
