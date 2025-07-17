@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     // Get recent posts (last 5)
     const { data: recentPosts } = await supabase
       .from('blog_posts')
-      .select('id, title, site_name, read_date')
+      .select('id, title, site_name, read_date, image_url')
       .eq('user_id', user.id)
       .order('read_date', { ascending: false })
       .limit(5)
