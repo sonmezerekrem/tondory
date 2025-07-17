@@ -1,13 +1,14 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { DashboardSquare02, Task01, Settings02 } from '@hugeicons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { DashboardSquare02Icon, Task01Icon, Settings02Icon } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
 const navigation = [
-  { name: 'Dashboard', href: '/app', icon: DashboardSquare02 },
-  { name: 'Tasks', href: '/app/tasks', icon: Task01 },
-  { name: 'Settings', href: '/app/settings', icon: Settings02 },
+  { name: 'Dashboard', href: '/app', icon: DashboardSquare02Icon },
+  { name: 'Tasks', href: '/app/tasks', icon: Task01Icon },
+  { name: 'Settings', href: '/app/settings', icon: Settings02Icon },
 ]
 
 export function AppSidebar() {
@@ -24,7 +25,7 @@ export function AppSidebar() {
                   "text-left"
                 )}
               >
-                <item.icon className="mr-2 h-4 w-4" />
+                <HugeiconsIcon icon={item.icon} size={16} className="mr-2" />
                 {item.name}
               </Button>
             </Link>

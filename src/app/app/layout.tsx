@@ -2,7 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AppSidebar } from '@/components/app-sidebar'
 import { Button } from '@/components/ui/button'
-import { LogOut } from '@hugeicons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { Logout01Icon } from '@hugeicons/core-free-icons'
 
 export default async function AppLayout({
   children,
@@ -29,7 +30,7 @@ export default async function AppLayout({
             </span>
             <form action="/auth/logout" method="post">
               <Button variant="outline" size="sm" type="submit">
-                <LogOut className="h-4 w-4 mr-2" />
+                <HugeiconsIcon icon={Logout01Icon} size={16} className="mr-2" />
                 Logout
               </Button>
             </form>

@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { User, Lock } from '@hugeicons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { UserIcon, SquareLock02Icon } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 
 export default function LoginPage() {
@@ -56,7 +57,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
-                <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <HugeiconsIcon icon={UserIcon} size={16} className="absolute left-3 top-3 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
@@ -71,7 +72,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <HugeiconsIcon icon={SquareLock02Icon} size={16} className="absolute left-3 top-3 text-muted-foreground" />
                 <Input
                   id="password"
                   type="password"

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Plus } from '@hugeicons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { PlusSignIcon } from '@hugeicons/core-free-icons'
 
 export default function TasksPage() {
   return (
@@ -13,7 +14,7 @@ export default function TasksPage() {
           </p>
         </div>
         <Button>
-          <Plus className="h-4 w-4 mr-2" />
+          <HugeiconsIcon icon={PlusSignIcon} size={16} className="mr-2" />
           New Task
         </Button>
       </div>

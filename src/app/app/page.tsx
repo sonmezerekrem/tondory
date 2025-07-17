@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { DashboardSquare02, Task01, CheckmarkCircle02 } from '@hugeicons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { DashboardSquare02Icon, Task01Icon, CheckmarkCircle02Icon } from '@hugeicons/core-free-icons'
 
 export default async function AppDashboard() {
   const supabase = await createClient()
@@ -19,7 +20,7 @@ export default async function AppDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Tasks</CardTitle>
-            <Task01 className="h-4 w-4 text-muted-foreground" />
+            <HugeiconsIcon icon={Task01Icon} size={16} className="text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
@@ -32,7 +33,7 @@ export default async function AppDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Completed</CardTitle>
-            <CheckmarkCircle02 className="h-4 w-4 text-muted-foreground" />
+            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} className="text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
@@ -45,7 +46,7 @@ export default async function AppDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Progress</CardTitle>
-            <DashboardSquare02 className="h-4 w-4 text-muted-foreground" />
+            <HugeiconsIcon icon={DashboardSquare02Icon} size={16} className="text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0%</div>

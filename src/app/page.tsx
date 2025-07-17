@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowRight01, DashboardSquare02, User } from '@hugeicons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { ArrowRight01Icon, DashboardSquare02Icon, UserIcon } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 
 export default function Home() {
@@ -23,9 +24,9 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Link href="/auth/login">
               <Button size="lg" className="flex items-center gap-2">
-                <User className="h-5 w-5" />
+                <HugeiconsIcon icon={UserIcon} size={20} />
                 Sign In
-                <ArrowRight01 className="h-4 w-4" />
+                <HugeiconsIcon icon={ArrowRight01Icon} size={16} />
               </Button>
             </Link>
             <Link href="/auth/register">
@@ -38,7 +39,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <Card>
               <CardHeader>
-                <DashboardSquare02 className="h-8 w-8 text-primary mb-2" />
+                <HugeiconsIcon icon={DashboardSquare02Icon} size={32} className="text-primary mb-2" />
                 <CardTitle>Dashboard</CardTitle>
                 <CardDescription>
                   Get an overview of your tasks and progress at a glance
@@ -47,7 +48,7 @@ export default function Home() {
             </Card>
             <Card>
               <CardHeader>
-                <DashboardSquare02 className="h-8 w-8 text-primary mb-2" />
+                <HugeiconsIcon icon={DashboardSquare02Icon} size={32} className="text-primary mb-2" />
                 <CardTitle>Task Management</CardTitle>
                 <CardDescription>
                   Create, organize, and track your tasks efficiently
@@ -56,7 +57,7 @@ export default function Home() {
             </Card>
             <Card>
               <CardHeader>
-                <DashboardSquare02 className="h-8 w-8 text-primary mb-2" />
+                <HugeiconsIcon icon={DashboardSquare02Icon} size={32} className="text-primary mb-2" />
                 <CardTitle>Progress Tracking</CardTitle>
                 <CardDescription>
                   Monitor your productivity and achievements over time
