@@ -7,16 +7,16 @@
     "light": {
       "colors": {
         "primary": {
-          "50": "#f0f9ff",
-          "100": "#e0f2fe",
-          "200": "#bae6fd",
-          "300": "#7dd3fc",
-          "400": "#38bdf8",
-          "500": "#0ea5e9",
-          "600": "#0284c7",
-          "700": "#0369a1",
-          "800": "#075985",
-          "900": "#0c4a6e"
+          "50": "#f7fee7",
+          "100": "#ecfccb",
+          "200": "#d9f99d",
+          "300": "#bef264",
+          "400": "#a3e635",
+          "500": "#84cc16",
+          "600": "#65a30d",
+          "700": "#4d7c0f",
+          "800": "#3f6212",
+          "900": "#365314"
         },
         "secondary": {
           "50": "#fafafa",
@@ -60,7 +60,7 @@
         "border": {
           "primary": "#e2e8f0",
           "secondary": "#cbd5e1",
-          "focus": "#0ea5e9",
+          "focus": "#84cc16",
           "error": "#ef4444"
         },
         "semantic": {
@@ -74,16 +74,16 @@
     "dark": {
       "colors": {
         "primary": {
-          "50": "#0c4a6e",
-          "100": "#075985",
-          "200": "#0369a1",
-          "300": "#0284c7",
-          "400": "#0ea5e9",
-          "500": "#38bdf8",
-          "600": "#7dd3fc",
-          "700": "#bae6fd",
-          "800": "#e0f2fe",
-          "900": "#f0f9ff"
+          "50": "#365314",
+          "100": "#3f6212",
+          "200": "#4d7c0f",
+          "300": "#65a30d",
+          "400": "#84cc16",
+          "500": "#a3e635",
+          "600": "#bef264",
+          "700": "#d9f99d",
+          "800": "#ecfccb",
+          "900": "#f7fee7"
         },
         "secondary": {
           "50": "#18181b",
@@ -127,7 +127,7 @@
         "border": {
           "primary": "#334155",
           "secondary": "#475569",
-          "focus": "#38bdf8",
+          "focus": "#a3e635",
           "error": "#ef4444"
         },
         "semantic": {
@@ -142,19 +142,22 @@
   "typography": {
     "fontFamilies": {
       "primary": {
-        "name": "Inter",
+        "name": "Urbanist",
         "fallback": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-        "weights": [300, 400, 500, 600, 700, 800]
+        "weights": [100, 200, 300, 400, 500, 600, 700, 800, 900],
+        "googleFonts": "https://fonts.googleapis.com/css2?family=Urbanist:wght@100;200;300;400;500;600;700;800;900&display=swap"
       },
       "secondary": {
-        "name": "SF Pro Display",
-        "fallback": "-apple-system, BlinkMacSystemFont, sans-serif",
-        "weights": [400, 500, 600, 700]
+        "name": "Urbanist",
+        "fallback": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        "weights": [400, 500, 600, 700, 800],
+        "googleFonts": "https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap"
       },
       "mono": {
-        "name": "SF Mono",
+        "name": "JetBrains Mono",
         "fallback": "Monaco, 'Cascadia Code', 'Roboto Mono', monospace",
-        "weights": [400, 500, 600]
+        "weights": [400, 500, 600, 700],
+        "googleFonts": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
       }
     },
     "scale": {
@@ -372,7 +375,7 @@
         "states": {
           "focus": {
             "borderColor": "border.focus",
-            "shadow": "0 0 0 3px rgba(14, 165, 233, 0.1)"
+            "shadow": "0 0 0 3px rgba(132, 204, 22, 0.1)"
           },
           "error": {
             "borderColor": "border.error",
