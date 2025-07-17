@@ -4,13 +4,15 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { PlusSignIcon, Search01Icon, Grid02Icon, Menu02Icon, FilterIcon } from '@hugeicons/core-free-icons'
+import { BookmarkAdd01Icon, Search01Icon, Grid02Icon, Menu02Icon, FilterIcon, PlusSignIcon, BookmarkRemove01Icon } from '@hugeicons/core-free-icons'
 import { BlogPostCard } from '@/components/blog-post-card'
 import { BlogPostListItem } from '@/components/blog-post-list-item'
 import { cn } from '@/lib/utils'
 import { useModal } from '@/contexts/modal-context'
 
-interface BlogPost {
+interface BookmarkedPost {
+  bookmark_id: string
+  bookmarked_at: string
   id: string
   url: string
   title: string
@@ -19,83 +21,54 @@ interface BlogPost {
   site_name: string
   read_date: string
   created_at: string
-  isBookmarked?: boolean
+  isBookmarked: boolean
 }
 
 type ViewMode = 'grid' | 'list'
 
-export default function BlogPostsPage() {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
-  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([])
+export default function BookmarksPage() {
+  const [bookmarks, setBookmarks] = useState<BookmarkedPost[]>([])
+  const [filteredBookmarks, setFilteredBookmarks] = useState<BookmarkedPost[]>([])
   const [loading, setLoading] = useState(true)
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [searchQuery, setSearchQuery] = useState('')
   const { openAddBlogPostModal } = useModal()
 
-  const handlePostAdded = (newPost: any) => {
-    const postWithBookmark = { ...newPost, isBookmarked: false }
-    setBlogPosts([postWithBookmark, ...blogPosts])
-    setFilteredPosts([postWithBookmark, ...filteredPosts])
-  }
-
-  const fetchBlogPosts = async () => {
+  const fetchBookmarks = async () => {
     try {
-      const response = await fetch('/api/blog-posts')
+      const response = await fetch('/api/bookmarks')
       if (response.ok) {
-        const posts = await response.json()
-        
-        // Fetch bookmark status for all posts
-        if (posts.length > 0) {
-          const postIds = posts.map((post: BlogPost) => post.id)
-          const bookmarkResponse = await fetch('/api/bookmarks/check', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ blog_post_ids: postIds }),
-          })
-          
-          let bookmarkMap = {}
-          if (bookmarkResponse.ok) {
-            bookmarkMap = await bookmarkResponse.json()
-          }
-          
-          const postsWithBookmarks = posts.map((post: BlogPost) => ({
-            ...post,
-            isBookmarked: bookmarkMap[post.id] || false
-          }))
-          
-          setBlogPosts(postsWithBookmarks)
-          setFilteredPosts(postsWithBookmarks)
-        } else {
-          setBlogPosts([])
-          setFilteredPosts([])
-        }
+        const data = await response.json()
+        const bookmarksWithFlag = data.map((bookmark: BookmarkedPost) => ({
+          ...bookmark,
+          isBookmarked: true
+        }))
+        setBookmarks(bookmarksWithFlag)
+        setFilteredBookmarks(bookmarksWithFlag)
       }
     } catch (error) {
-      console.error('Error fetching blog posts:', error)
+      console.error('Error fetching bookmarks:', error)
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    fetchBlogPosts()
+    fetchBookmarks()
   }, [])
 
   useEffect(() => {
     if (searchQuery.trim() === '') {
-      setFilteredPosts(blogPosts)
+      setFilteredBookmarks(bookmarks)
     } else {
-      const filtered = blogPosts.filter(post =>
-        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.site_name.toLowerCase().includes(searchQuery.toLowerCase())
+      const filtered = bookmarks.filter(bookmark =>
+        bookmark.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        bookmark.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        bookmark.site_name.toLowerCase().includes(searchQuery.toLowerCase())
       )
-      setFilteredPosts(filtered)
+      setFilteredBookmarks(filtered)
     }
-  }, [searchQuery, blogPosts])
-
+  }, [searchQuery, bookmarks])
 
   const handleBookmarkToggle = async (postId: string) => {
     try {
@@ -108,23 +81,24 @@ export default function BlogPostsPage() {
       })
 
       if (response.ok) {
-        const { isBookmarked } = await response.json()
-        const updatedPosts = blogPosts.map(post =>
-          post.id === postId 
-            ? { ...post, isBookmarked }
-            : post
-        )
-        setBlogPosts(updatedPosts)
-        setFilteredPosts(updatedPosts.filter(post =>
+        // Remove from bookmarks list since it was toggled off
+        const updatedBookmarks = bookmarks.filter(bookmark => bookmark.id !== postId)
+        setBookmarks(updatedBookmarks)
+        setFilteredBookmarks(updatedBookmarks.filter(bookmark =>
           searchQuery.trim() === '' || 
-          post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          post.site_name.toLowerCase().includes(searchQuery.toLowerCase())
+          bookmark.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          bookmark.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          bookmark.site_name.toLowerCase().includes(searchQuery.toLowerCase())
         ))
       }
     } catch (error) {
       console.error('Error toggling bookmark:', error)
     }
+  }
+
+  const handlePostAdded = (newPost: any) => {
+    // Refresh bookmarks to see if the new post was bookmarked
+    fetchBookmarks()
   }
 
   return (
@@ -133,9 +107,9 @@ export default function BlogPostsPage() {
       <div className="flex flex-col space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Articles</h1>
+            <h1 className="text-2xl font-bold text-foreground">Bookmarks</h1>
             <p className="text-sm text-muted-foreground">
-              Manage your reading collection
+              Your saved articles for later reading
             </p>
           </div>
           <Button 
@@ -156,7 +130,7 @@ export default function BlogPostsPage() {
           />
           <Input
             type="search"
-            placeholder="Search articles..."
+            placeholder="Search bookmarks..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10 h-12 bg-background/50 border-border/30 focus:border-primary/50 focus:ring-primary/20 rounded-xl text-sm"
@@ -202,7 +176,7 @@ export default function BlogPostsPage() {
           </div>
 
           <p className="text-sm text-muted-foreground">
-            {loading ? 'Loading...' : `${filteredPosts.length} article${filteredPosts.length !== 1 ? 's' : ''}`}
+            {loading ? 'Loading...' : `${filteredBookmarks.length} bookmark${filteredBookmarks.length !== 1 ? 's' : ''}`}
             {searchQuery && ` found for "${searchQuery}"`}
           </p>
         </div>
@@ -243,23 +217,23 @@ export default function BlogPostsPage() {
             </div>
           ))}
         </div>
-      ) : filteredPosts.length === 0 ? (
+      ) : filteredBookmarks.length === 0 ? (
         <div className="text-center py-16">
           <div className="w-16 h-16 bg-secondary/60 rounded-full flex items-center justify-center mx-auto mb-4">
-            <HugeiconsIcon icon={PlusSignIcon} size={32} className="text-muted-foreground" />
+            <HugeiconsIcon icon={BookmarkAdd01Icon} size={32} className="text-muted-foreground" />
           </div>
           <h3 className="text-lg font-medium text-foreground mb-2">
-            {searchQuery ? 'No articles found' : 'No articles yet'}
+            {searchQuery ? 'No bookmarks found' : 'No bookmarks yet'}
           </h3>
           <p className="text-muted-foreground mb-6">
             {searchQuery 
-              ? `No articles match "${searchQuery}". Try a different search term.`
-              : 'Start building your reading library by adding your first article.'
+              ? `No bookmarks match "${searchQuery}". Try a different search term.`
+              : 'Start bookmarking articles you want to read later.'
             }
           </p>
           {!searchQuery && (
             <Button 
-              className="bg-primary text-white hover:bg-primary/90"
+              className="bg-primary text-white hover:bg-primary/90 rounded-xl"
               onClick={() => openAddBlogPostModal(handlePostAdded)}
             >
               <HugeiconsIcon icon={PlusSignIcon} size={16} className="mr-2" />
@@ -274,18 +248,18 @@ export default function BlogPostsPage() {
             ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6" 
             : "divide-y divide-border/30"
         )}>
-          {filteredPosts.map((post) => (
+          {filteredBookmarks.map((bookmark) => (
             viewMode === 'grid' ? (
               <BlogPostCard
-                key={post.id}
-                post={post}
+                key={bookmark.id}
+                post={bookmark}
                 onBookmarkToggle={handleBookmarkToggle}
                 className="animate-fade-in"
               />
             ) : (
               <BlogPostListItem
-                key={post.id}
-                post={post}
+                key={bookmark.id}
+                post={bookmark}
                 onBookmarkToggle={handleBookmarkToggle}
                 className="animate-fade-in"
               />
@@ -293,7 +267,6 @@ export default function BlogPostsPage() {
           ))}
         </div>
       )}
-
     </div>
   )
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { BookOpen01Icon, Calendar01Icon, ChartIncreaseIcon, PlusSignIcon, Fire03Icon, Link02Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons'
+import { BookOpen01Icon, Calendar01Icon, ChartIncreaseIcon, PlusSignIcon, Fire03Icon, Link02Icon, ArrowRight01Icon, BookmarkAdd01Icon } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 import { useModal } from '@/contexts/modal-context'
 
@@ -11,6 +11,7 @@ interface BlogPostStats {
   total: number
   thisMonth: number
   thisWeek: number
+  bookmarks: number
   recentPosts: Array<{
     id: string
     title: string
@@ -131,18 +132,20 @@ export default function AppDashboard() {
           </div>
         </div>
 
-        {/* Reading Streak */}
+        {/* Bookmarks */}
         <div className="space-y-2">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-success/10 rounded-full flex items-center justify-center">
-              <HugeiconsIcon icon={Fire03Icon} size={20} className="text-success" />
+            <div className="w-10 h-10 bg-warning/10 rounded-full flex items-center justify-center">
+              <HugeiconsIcon icon={BookmarkAdd01Icon} size={20} className="text-warning" />
             </div>
             <div>
-              <p className="text-sm font-medium text-foreground">Reading Streak</p>
-              <p className="text-xs text-muted-foreground">Days in a row</p>
+              <p className="text-sm font-medium text-foreground">Bookmarks</p>
+              <p className="text-xs text-muted-foreground">Saved articles</p>
             </div>
           </div>
-          <div className="text-2xl font-bold text-success">3</div>
+          <div className="text-2xl font-bold text-warning">
+            {loading ? '...' : stats?.bookmarks || 0}
+          </div>
         </div>
       </div>
 
@@ -247,7 +250,7 @@ export default function AppDashboard() {
           <p className="text-sm text-muted-foreground">Common tasks and shortcuts</p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <Button 
             variant="ghost" 
             className="h-12 justify-start text-primary hover:bg-primary/10 border border-primary/30 hover:border-primary/60 rounded-xl transition-all"
@@ -264,6 +267,16 @@ export default function AppDashboard() {
             >
               <HugeiconsIcon icon={BookOpen01Icon} size={20} className="mr-3" />
               Browse Articles
+            </Button>
+          </Link>
+          
+          <Link href="/app/bookmarks">
+            <Button 
+              variant="ghost" 
+              className="w-full h-12 justify-start text-warning hover:bg-warning/10 border border-warning/30 hover:border-warning/60 rounded-xl transition-all"
+            >
+              <HugeiconsIcon icon={BookmarkAdd01Icon} size={20} className="mr-3" />
+              View Bookmarks
             </Button>
           </Link>
         </div>

@@ -33,8 +33,6 @@ const navigation = [
     name: 'Bookmarks',
     href: '/app/bookmarks',
     icon: BookmarkAdd01Icon,
-    disabled: true,
-    badge: "Coming Soon"
   },
   {
     name: 'Settings',

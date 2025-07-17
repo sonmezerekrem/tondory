@@ -29,8 +29,7 @@ const navigation = [
     { 
     name: 'Bookmarks', 
     href: '/app/bookmarks', 
-    icon: BookmarkAdd01Icon,
-    disabled: true
+    icon: BookmarkAdd01Icon
   },
   { 
     name: 'Settings', 

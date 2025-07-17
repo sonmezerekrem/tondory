@@ -36,15 +36,22 @@ export async function GET(request: NextRequest) {
     // Get recent posts (last 5)
     const { data: recentPosts } = await supabase
       .from('blog_posts')
-      .select('id, title, site_name, read_date, image_url')
+      .select('id, title, site_name, read_date, image_url, url')
       .eq('user_id', user.id)
       .order('read_date', { ascending: false })
       .limit(5)
+
+    // Get bookmarks count
+    const { count: bookmarksCount } = await supabase
+      .from('bookmarks')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id)
 
     return NextResponse.json({
       total: totalCount || 0,
       thisMonth: thisMonthCount || 0,
       thisWeek: thisWeekCount || 0,
+      bookmarks: bookmarksCount || 0,
       recentPosts: recentPosts || [],
     })
   } catch (error) {
