@@ -22,7 +22,7 @@ export default async function AppLayout({
       <div className="flex">
         <AppSidebar />
         <main className="flex-1 lg:ml-64">
-          <div className="p-4 sm:p-6 lg:p-8 pb-20 lg:pb-8">
+          <div className="p-4 sm:p-6 lg:p-8 pb-20 lg:pb-8 pt-4 lg:pt-8">
             {children}
           </div>
         </main>

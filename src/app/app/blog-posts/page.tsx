@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { PlusSignIcon, Search01Icon, Grid02Icon, Menu02Icon, FilterIcon } from '@hugeicons/core-free-icons'
 import { AddBlogPostModal } from '@/components/add-blog-post-modal'
@@ -94,90 +93,82 @@ export default function BlogPostsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Articles</h1>
-          <p className="text-muted-foreground">
-            Manage your reading collection
-          </p>
+      <div className="flex flex-col space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Articles</h1>
+            <p className="text-sm text-muted-foreground">
+              Manage your reading collection
+            </p>
+          </div>
+          <Button 
+            className="bg-primary text-white hover:bg-primary/90 rounded-xl px-6"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <HugeiconsIcon icon={PlusSignIcon} size={16} className="mr-2" />
+            Add Article
+          </Button>
         </div>
-        <Button 
-          className="bg-primary text-white hover:bg-primary/90 shadow-lg self-start sm:self-auto"
-          onClick={() => setIsModalOpen(true)}
-        >
-          <HugeiconsIcon icon={PlusSignIcon} size={16} className="mr-2" />
-          Add Article
-        </Button>
-      </div>
 
-      {/* Search and Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
         {/* Search */}
-        <div className="relative flex-1">
+        <div className="relative">
           <HugeiconsIcon 
             icon={Search01Icon} 
             size={18} 
-            className="absolute left-3 top-3 text-muted-foreground" 
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" 
           />
           <Input
             type="search"
             placeholder="Search articles..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20 rounded-xl"
+            className="pl-10 h-12 bg-background/50 border-border/30 focus:border-primary/50 focus:ring-primary/20 rounded-xl text-sm"
           />
         </div>
 
-        {/* View Toggle */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center bg-secondary/50 rounded-lg p-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cn(
-                "h-8 px-3 rounded-md transition-all",
-                viewMode === 'grid' 
-                  ? "bg-background shadow-sm text-foreground" 
-                  : "text-muted-foreground hover:text-foreground"
-              )}
-              onClick={() => setViewMode('grid')}
-            >
-              <HugeiconsIcon icon={Grid02Icon} size={16} />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cn(
-                "h-8 px-3 rounded-md transition-all",
-                viewMode === 'list' 
-                  ? "bg-background shadow-sm text-foreground" 
-                  : "text-muted-foreground hover:text-foreground"
-              )}
-              onClick={() => setViewMode('list')}
-            >
-              <HugeiconsIcon icon={Menu02Icon} size={16} />
+        {/* View Toggle and Results */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center bg-secondary/30 rounded-lg p-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "h-8 px-3 rounded-md transition-all",
+                  viewMode === 'grid' 
+                    ? "bg-background shadow-sm text-foreground" 
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+                onClick={() => setViewMode('grid')}
+              >
+                <HugeiconsIcon icon={Grid02Icon} size={16} />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "h-8 px-3 rounded-md transition-all",
+                  viewMode === 'list' 
+                    ? "bg-background shadow-sm text-foreground" 
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+                onClick={() => setViewMode('list')}
+              >
+                <HugeiconsIcon icon={Menu02Icon} size={16} />
+              </Button>
+            </div>
+
+            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+              <HugeiconsIcon icon={FilterIcon} size={16} className="mr-2" />
+              Filter
             </Button>
           </div>
 
-          {/* Filter Button */}
-          <Button variant="outline" size="sm" className="border-border/60">
-            <HugeiconsIcon icon={FilterIcon} size={16} className="mr-2" />
-            Filter
-          </Button>
+          <p className="text-sm text-muted-foreground">
+            {loading ? 'Loading...' : `${filteredPosts.length} article${filteredPosts.length !== 1 ? 's' : ''}`}
+            {searchQuery && ` found for "${searchQuery}"`}
+          </p>
         </div>
-      </div>
-
-      {/* Results Count */}
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
-          {loading ? 'Loading...' : `${filteredPosts.length} article${filteredPosts.length !== 1 ? 's' : ''}`}
-          {searchQuery && ` found for "${searchQuery}"`}
-        </p>
-        {filteredPosts.length > 0 && (
-          <Badge variant="secondary" className="text-xs">
-            {viewMode === 'grid' ? 'Grid View' : 'List View'}
-          </Badge>
-        )}
       </div>
 
       {/* Content */}

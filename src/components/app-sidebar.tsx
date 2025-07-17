@@ -50,7 +50,7 @@ export function AppSidebar() {
     <>
       {/* Desktop Sidebar */}
       <aside className={cn(
-        "fixed left-0 top-16 z-40 h-[calc(100vh-4rem)] bg-background border-r border-border/60 transition-all duration-300 hidden lg:block",
+        "fixed left-0 top-0 lg:top-16 z-40 h-screen lg:h-[calc(100vh-4rem)] bg-background border-r border-border/60 transition-all duration-300 hidden lg:block",
         isCollapsed ? "w-16" : "w-64"
       )}>
         <div className="flex flex-col h-full">
@@ -113,7 +113,7 @@ export function AppSidebar() {
 
       {/* Mobile Sidebar Overlay */}
       <div className="lg:hidden fixed inset-0 z-50 bg-black/20 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity">
-        <aside className="fixed left-0 top-16 z-40 h-[calc(100vh-4rem)] w-64 bg-background border-r border-border/60 transform -translate-x-full transition-transform">
+        <aside className="fixed left-0 top-0 lg:top-16 z-40 h-screen lg:h-[calc(100vh-4rem)] w-64 bg-background border-r border-border/60 transform -translate-x-full transition-transform">
           <div className="flex flex-col h-full">
             {/* Quick Actions */}
             <div className="p-4 border-b border-border/60">

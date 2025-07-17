@@ -12,7 +12,7 @@ interface AppHeaderProps {
 
 export function AppHeader({ user }: AppHeaderProps) {
   return (
-    <header className="bg-background border-b border-border/60 sticky top-0 z-50 backdrop-blur-sm bg-background/80">
+    <header className="hidden lg:block bg-background border-b border-border/60 sticky top-0 z-50 backdrop-blur-sm bg-background/80">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo and Mobile Menu Button */}
