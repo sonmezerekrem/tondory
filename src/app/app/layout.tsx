@@ -1,9 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AppSidebar } from '@/components/app-sidebar'
-import { Button } from '@/components/ui/button'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Logout01Icon } from '@hugeicons/core-free-icons'
+import { AppHeader } from '@/components/app-header'
 
 export default async function AppLayout({
   children,
@@ -18,29 +16,14 @@ export default async function AppLayout({
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="flex h-16 items-center justify-between px-4">
-          <div className="flex items-center space-x-4">
-            <h1 className="text-xl font-semibold">Tondory</h1>
-          </div>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-muted-foreground">
-              {user.email}
-            </span>
-            <form action="/auth/logout" method="post">
-              <Button variant="outline" size="sm" type="submit">
-                <HugeiconsIcon icon={Logout01Icon} size={16} className="mr-2" />
-                Logout
-              </Button>
-            </form>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-secondary/30">
+      <AppHeader user={user} />
       <div className="flex">
         <AppSidebar />
-        <main className="flex-1 p-6">
-          {children}
+        <main className="flex-1 lg:ml-64">
+          <div className="p-4 sm:p-6 lg:p-8">
+            {children}
+          </div>
         </main>
       </div>
     </div>
