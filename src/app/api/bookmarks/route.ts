@@ -15,11 +15,25 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
 
-    // Get bookmarked posts using the view
+    // Get bookmarked posts using direct JOIN
     const { data: bookmarks, error } = await supabase
-      .from('bookmarked_posts')
-      .select('*')
-      .order('bookmarked_at', { ascending: false })
+      .from('bookmarks')
+      .select(`
+        id,
+        created_at,
+        blog_posts:blog_post_id (
+          id,
+          url,
+          title,
+          description,
+          image_url,
+          site_name,
+          read_date,
+          created_at,
+          updated_at
+        )
+      `)
+      .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
 
     if (error) {
@@ -27,7 +41,22 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch bookmarks' }, { status: 500 })
     }
 
-    return NextResponse.json(bookmarks)
+    // Transform the data to match the expected format
+    const transformedBookmarks = bookmarks?.map(bookmark => ({
+      bookmark_id: bookmark.id,
+      bookmarked_at: bookmark.created_at,
+      id: bookmark.blog_posts?.id,
+      url: bookmark.blog_posts?.url,
+      title: bookmark.blog_posts?.title,
+      description: bookmark.blog_posts?.description,
+      image_url: bookmark.blog_posts?.image_url,
+      site_name: bookmark.blog_posts?.site_name,
+      read_date: bookmark.blog_posts?.read_date,
+      created_at: bookmark.blog_posts?.created_at,
+      updated_at: bookmark.blog_posts?.updated_at
+    })) || []
+
+    return NextResponse.json(transformedBookmarks)
   } catch (error) {
     console.error('Error in GET /api/bookmarks:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
