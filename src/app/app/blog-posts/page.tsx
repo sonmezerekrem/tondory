@@ -1,12 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { PlusSignIcon, Link02Icon, Calendar01Icon, LinkCircle02Icon } from '@hugeicons/core-free-icons'
+import { PlusSignIcon, Search01Icon, Grid02Icon, Menu02Icon, FilterIcon } from '@hugeicons/core-free-icons'
 import { AddBlogPostModal } from '@/components/add-blog-post-modal'
+import { BlogPostCard } from '@/components/blog-post-card'
+import { BlogPostListItem } from '@/components/blog-post-list-item'
+import { cn } from '@/lib/utils'
 
 interface BlogPost {
   id: string
@@ -17,19 +20,30 @@ interface BlogPost {
   site_name: string
   read_date: string
   created_at: string
+  isBookmarked?: boolean
 }
+
+type ViewMode = 'grid' | 'list'
 
 export default function BlogPostsPage() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
+  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [viewMode, setViewMode] = useState<ViewMode>('grid')
+  const [searchQuery, setSearchQuery] = useState('')
 
   const fetchBlogPosts = async () => {
     try {
       const response = await fetch('/api/blog-posts')
       if (response.ok) {
         const data = await response.json()
-        setBlogPosts(data)
+        const postsWithBookmarks = data.map((post: BlogPost) => ({
+          ...post,
+          isBookmarked: false // TODO: Implement bookmark API
+        }))
+        setBlogPosts(postsWithBookmarks)
+        setFilteredPosts(postsWithBookmarks)
       }
     } catch (error) {
       console.error('Error fetching blog posts:', error)
@@ -42,120 +56,198 @@ export default function BlogPostsPage() {
     fetchBlogPosts()
   }, [])
 
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setFilteredPosts(blogPosts)
+    } else {
+      const filtered = blogPosts.filter(post =>
+        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.site_name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      setFilteredPosts(filtered)
+    }
+  }, [searchQuery, blogPosts])
+
   const handlePostAdded = (newPost: BlogPost) => {
-    setBlogPosts([newPost, ...blogPosts])
+    const postWithBookmark = { ...newPost, isBookmarked: false }
+    setBlogPosts([postWithBookmark, ...blogPosts])
+    setFilteredPosts([postWithBookmark, ...filteredPosts])
     setIsModalOpen(false)
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    })
+  const handleBookmarkToggle = (postId: string) => {
+    const updatedPosts = blogPosts.map(post =>
+      post.id === postId 
+        ? { ...post, isBookmarked: !post.isBookmarked }
+        : post
+    )
+    setBlogPosts(updatedPosts)
+    setFilteredPosts(updatedPosts.filter(post =>
+      searchQuery.trim() === '' || 
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.site_name.toLowerCase().includes(searchQuery.toLowerCase())
+    ))
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Blog Posts</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Articles</h1>
           <p className="text-muted-foreground">
-            Keep track of the blog posts you've read
+            Manage your reading collection
           </p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)}>
+        <Button 
+          className="bg-primary text-white hover:bg-primary/90 shadow-lg self-start sm:self-auto"
+          onClick={() => setIsModalOpen(true)}
+        >
           <HugeiconsIcon icon={PlusSignIcon} size={16} className="mr-2" />
-          Add Blog Post
+          Add Article
         </Button>
       </div>
 
+      {/* Search and Filters */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        {/* Search */}
+        <div className="relative flex-1">
+          <HugeiconsIcon 
+            icon={Search01Icon} 
+            size={18} 
+            className="absolute left-3 top-3 text-muted-foreground" 
+          />
+          <Input
+            type="search"
+            placeholder="Search articles..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20 rounded-xl"
+          />
+        </div>
+
+        {/* View Toggle */}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center bg-secondary/50 rounded-lg p-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "h-8 px-3 rounded-md transition-all",
+                viewMode === 'grid' 
+                  ? "bg-background shadow-sm text-foreground" 
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+              onClick={() => setViewMode('grid')}
+            >
+              <HugeiconsIcon icon={Grid02Icon} size={16} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "h-8 px-3 rounded-md transition-all",
+                viewMode === 'list' 
+                  ? "bg-background shadow-sm text-foreground" 
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+              onClick={() => setViewMode('list')}
+            >
+              <HugeiconsIcon icon={Menu02Icon} size={16} />
+            </Button>
+          </div>
+
+          {/* Filter Button */}
+          <Button variant="outline" size="sm" className="border-border/60">
+            <HugeiconsIcon icon={FilterIcon} size={16} className="mr-2" />
+            Filter
+          </Button>
+        </div>
+      </div>
+
+      {/* Results Count */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          {loading ? 'Loading...' : `${filteredPosts.length} article${filteredPosts.length !== 1 ? 's' : ''}`}
+          {searchQuery && ` found for "${searchQuery}"`}
+        </p>
+        {filteredPosts.length > 0 && (
+          <Badge variant="secondary" className="text-xs">
+            {viewMode === 'grid' ? 'Grid View' : 'List View'}
+          </Badge>
+        )}
+      </div>
+
+      {/* Content */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className={cn(
+          viewMode === 'grid' 
+            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" 
+            : "space-y-4"
+        )}>
           {[...Array(6)].map((_, i) => (
-            <Card key={i} className="animate-pulse">
-              <CardHeader>
-                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-              </CardHeader>
-              <CardContent>
-                <div className="h-3 bg-gray-200 rounded w-full mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-              </CardContent>
-            </Card>
+            <div key={i} className={cn(
+              "animate-pulse rounded-xl",
+              viewMode === 'grid' 
+                ? "bg-secondary/30 aspect-[4/5]" 
+                : "bg-secondary/30 h-24"
+            )}></div>
           ))}
         </div>
-      ) : blogPosts.length === 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>No blog posts yet</CardTitle>
-            <CardDescription>
-              Start by adding your first blog post to keep track of your reading
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button onClick={() => setIsModalOpen(true)}>
+      ) : filteredPosts.length === 0 ? (
+        <div className="text-center py-16">
+          <div className="w-16 h-16 bg-secondary/60 rounded-full flex items-center justify-center mx-auto mb-4">
+            <HugeiconsIcon icon={PlusSignIcon} size={32} className="text-muted-foreground" />
+          </div>
+          <h3 className="text-lg font-medium text-foreground mb-2">
+            {searchQuery ? 'No articles found' : 'No articles yet'}
+          </h3>
+          <p className="text-muted-foreground mb-6">
+            {searchQuery 
+              ? `No articles match "${searchQuery}". Try a different search term.`
+              : 'Start building your reading library by adding your first article.'
+            }
+          </p>
+          {!searchQuery && (
+            <Button 
+              className="bg-primary text-white hover:bg-primary/90"
+              onClick={() => setIsModalOpen(true)}
+            >
               <HugeiconsIcon icon={PlusSignIcon} size={16} className="mr-2" />
-              Add Your First Blog Post
+              Add Your First Article
             </Button>
-          </CardContent>
-        </Card>
+          )}
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogPosts.map((post) => (
-            <Card key={post.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg line-clamp-2 mb-2">
-                      {post.title || 'Untitled'}
-                    </CardTitle>
-                    <div className="flex items-center text-sm text-muted-foreground mb-2">
-                      <HugeiconsIcon icon={Calendar01Icon} size={14} className="mr-1" />
-                      {formatDate(post.read_date)}
-                    </div>
-                    {post.site_name && (
-                      <Badge variant="secondary" className="text-xs">
-                        {post.site_name}
-                      </Badge>
-                    )}
-                  </div>
-                  {post.image_url && (
-                    <img
-                      src={post.image_url}
-                      alt={post.title}
-                      className="w-16 h-16 object-cover rounded ml-3"
-                    />
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                {post.description && (
-                  <p className="text-sm text-muted-foreground line-clamp-3 mb-3">
-                    {post.description}
-                  </p>
-                )}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <HugeiconsIcon icon={Link02Icon} size={14} className="mr-1" />
-                    <span className="truncate max-w-[200px]">
-                      {new URL(post.url).hostname}
-                    </span>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => window.open(post.url, '_blank')}
-                  >
-                    <HugeiconsIcon icon={LinkCircle02Icon} size={14} />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+        <div className={cn(
+          "transition-all duration-300",
+          viewMode === 'grid' 
+            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" 
+            : "space-y-4"
+        )}>
+          {filteredPosts.map((post) => (
+            viewMode === 'grid' ? (
+              <BlogPostCard
+                key={post.id}
+                post={post}
+                onBookmarkToggle={handleBookmarkToggle}
+                className="animate-fade-in"
+              />
+            ) : (
+              <BlogPostListItem
+                key={post.id}
+                post={post}
+                onBookmarkToggle={handleBookmarkToggle}
+                className="animate-fade-in"
+              />
+            )
           ))}
         </div>
       )}
 
+      {/* Add Article Modal */}
       <AddBlogPostModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
