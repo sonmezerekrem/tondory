@@ -16,6 +16,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [displayName, setDisplayName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
@@ -44,6 +45,11 @@ export default function RegisterPage() {
       const { error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            display_name: displayName.trim() || undefined
+          }
+        }
       })
 
       if (error) {
@@ -117,6 +123,27 @@ export default function RegisterPage() {
                 </div>
               ) : (
                 <form onSubmit={handleRegister} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="displayName" className="text-sm font-medium">
+                      Display Name
+                    </Label>
+                    <div className="relative">
+                      <HugeiconsIcon 
+                        icon={UserIcon} 
+                        size={20} 
+                        className="absolute left-3 top-3 text-muted-foreground" 
+                      />
+                      <Input
+                        id="displayName"
+                        type="text"
+                        placeholder="Enter your display name (optional)"
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        className="pl-10 h-12 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20"
+                      />
+                    </div>
+                  </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-sm font-medium">
                       Email Address

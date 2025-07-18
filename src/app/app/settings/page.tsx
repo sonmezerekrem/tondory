@@ -2,10 +2,15 @@ import { Button } from '@/components/ui/button'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Logout01Icon, User02Icon, Settings02Icon } from '@hugeicons/core-free-icons'
 import { createClient } from '@/lib/supabase/server'
+import ProfileEditForm from '@/components/profile-edit-form'
 
 export default async function SettingsPage() {
-  const supabase = await createClient()
+  const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return null
+  }
 
   return (
     <div className="space-y-8">
@@ -30,6 +35,8 @@ export default async function SettingsPage() {
         </div>
 
         <div className="space-y-4 pl-13">
+          <ProfileEditForm user={user} />
+          
           <div className="flex flex-col space-y-1">
             <label className="text-sm font-medium text-foreground">Email Address</label>
             <div className="text-sm text-muted-foreground">{user?.email}</div>

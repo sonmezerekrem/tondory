@@ -54,6 +54,9 @@ export function AppHeader({ user }: AppHeaderProps) {
                 </div>
                 <div className="hidden lg:block">
                   <p className="text-sm font-medium text-foreground">
+                    {user.user_metadata?.display_name || user.email?.split('@')[0]}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
                     {user.email?.split('@')[0]}
                   </p>
                 </div>
