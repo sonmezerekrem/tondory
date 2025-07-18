@@ -66,10 +66,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       data: transformedData,
       pagination: {
-        page,
-        size,
-        total: count || 0,
-        totalPages: Math.ceil((count || 0) / size)
+        total_count: count || 0,
+        current_size: transformedData.length,
+        current_page: page,
+        total_page: Math.ceil((count || 0) / size),
+        page_size: size,
       }
     })
   } catch (error) {

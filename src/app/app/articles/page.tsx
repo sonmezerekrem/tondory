@@ -8,6 +8,8 @@ import {cookies} from "next/headers";
 import ArticlesAddButton from "@/components/articles-add-button";
 import ArticleSearchBox from "@/components/article-search-box";
 import ArticleViewModeChange from "@/components/article-view-mode-change";
+import {BlogPostsResponse} from "@/types/responses";
+import ArticlePagination from "@/components/article-pagination";
 
 type PageProps = {
     page?: string;
@@ -24,7 +26,7 @@ export default async function Page(props: { searchParams: Promise<PageProps> }) 
     const searchStr = search || ""
     const viewMode = view || 'grid'
 
-    const blogPosts: BlogPost[] = await fetch(
+    const response: BlogPostsResponse = await fetch(
         `${process.env.BACKEND_URL}/api/blog-posts?page=${currentPage}&size=${pageSize}&search=${searchStr}`, {
             headers: {
                 Cookie: cookieStore.toString(),
@@ -32,6 +34,9 @@ export default async function Page(props: { searchParams: Promise<PageProps> }) 
             },
             cache: "no-store",
         }).then(res => res.json())
+
+    const blogPosts: BlogPost[] = response.data || []
+    const pagination = response.pagination || {}
 
     return (
         <div className="space-y-6">
@@ -94,6 +99,11 @@ export default async function Page(props: { searchParams: Promise<PageProps> }) 
                         )
                     ))}
                 </div>
+            )}
+
+            {/* Pagination */}
+            {blogPosts.length > 0 && pagination.total_page > 1 && (
+                <ArticlePagination pagination={pagination}/>
             )}
 
         </div>
