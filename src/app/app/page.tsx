@@ -82,7 +82,7 @@ export default async function Page() {
                         <h2 className="text-lg font-semibold text-foreground">Recent Articles</h2>
                         <p className="text-sm text-muted-foreground">Your latest reading activity</p>
                     </div>
-                    <Link href="/app/blog-posts">
+                    <Link href="/app/articles">
                         <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
                             View All
                             <HugeiconsIcon icon={ArrowRight01Icon} size={14} className="ml-1"/>

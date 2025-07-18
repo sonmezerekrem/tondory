@@ -19,7 +19,7 @@ const navigation = [
   },
   {
     name: 'Articles',
-    href: '/app/blog-posts',
+    href: '/app/articles',
     icon: BookOpen01Icon,
   },
   {
