@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 // GET /api/bookmarks - Get all bookmarks for current user
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     
     if (userError || !user) {
@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
 // POST /api/bookmarks - Add a bookmark
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     
     if (userError || !user) {
