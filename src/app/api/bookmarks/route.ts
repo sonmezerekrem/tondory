@@ -4,19 +4,24 @@ import { NextRequest, NextResponse } from 'next/server'
 // GET /api/bookmarks - Get all bookmarks for current user
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = createClient()
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     
     if (userError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Get query parameters
     const { searchParams } = new URL(request.url)
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const page = parseInt(searchParams.get('page') || '1')
+    const size = parseInt(searchParams.get('size') || '10')
+    const search = searchParams.get('search') || ''
+    
+    // Calculate offset for pagination
+    const offset = (page - 1) * size
 
-    // Get bookmarked posts using direct JOIN
-    const { data: bookmarks, error } = await supabase
+    // Build query
+    let query = supabase
       .from('bookmarks')
       .select(`
         id,
@@ -33,8 +38,19 @@ export async function GET(request: NextRequest) {
           updated_at
         )
       `)
+      .eq('user_id', user.id)
+
+    // Add search filter if provided
+    if (search) {
+      query = query.or(`blog_posts.title.ilike.%${search}%,blog_posts.description.ilike.%${search}%,blog_posts.site_name.ilike.%${search}%`)
+    }
+
+    // Add pagination and ordering
+    query = query
       .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+      .range(offset, offset + size - 1)
+
+    const { data: bookmarks, error } = await query
 
     if (error) {
       console.error('Error fetching bookmarks:', error)
@@ -43,20 +59,33 @@ export async function GET(request: NextRequest) {
 
     // Transform the data to match the expected format
     const transformedBookmarks = bookmarks?.map(bookmark => ({
+      ...bookmark.blog_posts,
+      isBookmarked: true, // All results are bookmarked by definition
       bookmark_id: bookmark.id,
-      bookmarked_at: bookmark.created_at,
-      id: bookmark.blog_posts?.id,
-      url: bookmark.blog_posts?.url,
-      title: bookmark.blog_posts?.title,
-      description: bookmark.blog_posts?.description,
-      image_url: bookmark.blog_posts?.image_url,
-      site_name: bookmark.blog_posts?.site_name,
-      read_date: bookmark.blog_posts?.read_date,
-      created_at: bookmark.blog_posts?.created_at,
-      updated_at: bookmark.blog_posts?.updated_at
+      bookmarked_at: bookmark.created_at
     })) || []
 
-    return NextResponse.json(transformedBookmarks)
+    // Get total count for pagination
+    let countQuery = supabase
+      .from('bookmarks')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+
+    if (search) {
+      countQuery = countQuery.or(`blog_posts.title.ilike.%${search}%,blog_posts.description.ilike.%${search}%,blog_posts.site_name.ilike.%${search}%`)
+    }
+
+    const { count } = await countQuery
+
+    return NextResponse.json({
+      data: transformedBookmarks,
+      pagination: {
+        page,
+        size,
+        total: count || 0,
+        totalPages: Math.ceil((count || 0) / size)
+      }
+    })
   } catch (error) {
     console.error('Error in GET /api/bookmarks:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
@@ -66,7 +95,7 @@ export async function GET(request: NextRequest) {
 // POST /api/bookmarks - Add a bookmark
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = createClient()
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     
     if (userError || !user) {

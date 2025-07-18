@@ -1,272 +1,111 @@
-'use client'
+import {HugeiconsIcon} from '@hugeicons/react'
+import {PlusSignIcon} from '@hugeicons/core-free-icons'
+import {BlogPostCard} from '@/components/blog-post-card'
+import {BlogPostListItem} from '@/components/blog-post-list-item'
+import {cn} from '@/lib/utils'
+import {BlogPost} from "@/types/blog-post";
+import {cookies} from "next/headers";
+import ArticlesAddButton from "@/components/articles-add-button";
+import ArticleSearchBox from "@/components/article-search-box";
+import ArticleViewModeChange from "@/components/article-view-mode-change";
+import {BlogPostsResponse} from "@/types/responses";
+import ArticlePagination from "@/components/article-pagination";
 
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { BookmarkAdd01Icon, Search01Icon, Grid02Icon, Menu02Icon, FilterIcon, PlusSignIcon, BookmarkRemove01Icon } from '@hugeicons/core-free-icons'
-import { BlogPostCard } from '@/components/blog-post-card'
-import { BlogPostListItem } from '@/components/blog-post-list-item'
-import { cn } from '@/lib/utils'
-import { useModal } from '@/contexts/modal-context'
-
-interface BookmarkedPost {
-  bookmark_id: string
-  bookmarked_at: string
-  id: string
-  url: string
-  title: string
-  description: string
-  image_url: string
-  site_name: string
-  read_date: string
-  created_at: string
-  isBookmarked: boolean
+type PageProps = {
+  page?: string;
+  size?: string;
+  view?: 'list' | 'grid';
+  search?: string;
 }
 
-type ViewMode = 'grid' | 'list'
+export default async function Page(props: { searchParams: Promise<PageProps> }) {
+  const cookieStore = await cookies()
+  const {page, size, view, search} = await props.searchParams
+  const currentPage = Number(page) || 1
+  const pageSize = Number(size) || 100
+  const searchStr = search || ""
+  const viewMode = view || 'grid'
 
-export default function BookmarksPage() {
-  const [bookmarks, setBookmarks] = useState<BookmarkedPost[]>([])
-  const [filteredBookmarks, setFilteredBookmarks] = useState<BookmarkedPost[]>([])
-  const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<ViewMode>('grid')
-  const [searchQuery, setSearchQuery] = useState('')
-  const { openAddBlogPostModal } = useModal()
-
-  const fetchBookmarks = async () => {
-    try {
-      const response = await fetch('/api/bookmarks')
-      if (response.ok) {
-        const data = await response.json()
-        const bookmarksWithFlag = data.map((bookmark: BookmarkedPost) => ({
-          ...bookmark,
-          isBookmarked: true
-        }))
-        setBookmarks(bookmarksWithFlag)
-        setFilteredBookmarks(bookmarksWithFlag)
-      }
-    } catch (error) {
-      console.error('Error fetching bookmarks:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchBookmarks()
-  }, [])
-
-  useEffect(() => {
-    if (searchQuery.trim() === '') {
-      setFilteredBookmarks(bookmarks)
-    } else {
-      const filtered = bookmarks.filter(bookmark =>
-        bookmark.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        bookmark.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        bookmark.site_name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-      setFilteredBookmarks(filtered)
-    }
-  }, [searchQuery, bookmarks])
-
-  const handleBookmarkToggle = async (postId: string) => {
-    try {
-      const response = await fetch('/api/bookmarks/toggle', {
-        method: 'POST',
+  const response: BlogPostsResponse = await fetch(
+      `${process.env.BACKEND_URL}/api/bookmarks?page=${currentPage}&size=${pageSize}&search=${searchStr}`, {
         headers: {
+          Cookie: cookieStore.toString(),
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ blog_post_id: postId }),
-      })
+        cache: "no-store",
+      }).then(res => res.json())
 
-      if (response.ok) {
-        // Remove from bookmarks list since it was toggled off
-        const updatedBookmarks = bookmarks.filter(bookmark => bookmark.id !== postId)
-        setBookmarks(updatedBookmarks)
-        setFilteredBookmarks(updatedBookmarks.filter(bookmark =>
-          searchQuery.trim() === '' || 
-          bookmark.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          bookmark.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          bookmark.site_name.toLowerCase().includes(searchQuery.toLowerCase())
-        ))
-      }
-    } catch (error) {
-      console.error('Error toggling bookmark:', error)
-    }
-  }
-
-  const handlePostAdded = (newPost: any) => {
-    // Refresh bookmarks to see if the new post was bookmarked
-    fetchBookmarks()
-  }
+  const blogPosts: BlogPost[] = response.data || []
+  const pagination = response.pagination || {}
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Bookmarks</h1>
-            <p className="text-sm text-muted-foreground">
-              Your saved articles for later reading
-            </p>
-          </div>
-          <Button 
-            className="bg-primary text-white hover:bg-primary/90 rounded-xl px-6"
-            onClick={() => openAddBlogPostModal(handlePostAdded)}
-          >
-            <HugeiconsIcon icon={PlusSignIcon} size={16} className="mr-2" />
-            Add Article
-          </Button>
-        </div>
-
-        {/* Search */}
-        <div className="relative">
-          <HugeiconsIcon 
-            icon={Search01Icon} 
-            size={18} 
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" 
-          />
-          <Input
-            type="search"
-            placeholder="Search bookmarks..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 h-12 bg-background/50 border-border/30 focus:border-primary/50 focus:ring-primary/20 rounded-xl text-sm"
-          />
-        </div>
-
-        {/* View Toggle and Results */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center bg-secondary/30 rounded-lg p-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(
-                  "h-8 px-3 rounded-md transition-all",
-                  viewMode === 'grid' 
-                    ? "bg-background shadow-sm text-foreground" 
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-                onClick={() => setViewMode('grid')}
-              >
-                <HugeiconsIcon icon={Grid02Icon} size={16} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(
-                  "h-8 px-3 rounded-md transition-all",
-                  viewMode === 'list' 
-                    ? "bg-background shadow-sm text-foreground" 
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-                onClick={() => setViewMode('list')}
-              >
-                <HugeiconsIcon icon={Menu02Icon} size={16} />
-              </Button>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex flex-col space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">Bookmarks</h1>
+              <p className="text-sm text-muted-foreground">
+                  Your saved articles for later reading
+              </p>
             </div>
-
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-              <HugeiconsIcon icon={FilterIcon} size={16} className="mr-2" />
-              Filter
-            </Button>
+            <ArticlesAddButton/>
           </div>
 
-          <p className="text-sm text-muted-foreground">
-            {loading ? 'Loading...' : `${filteredBookmarks.length} bookmark${filteredBookmarks.length !== 1 ? 's' : ''}`}
-            {searchQuery && ` found for "${searchQuery}"`}
-          </p>
-        </div>
-      </div>
+          {/* Search */}
+          <ArticleSearchBox/>
 
-      {/* Content */}
-      {loading ? (
-        <div className={cn(
-          viewMode === 'grid' 
-            ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6" 
-            : "divide-y divide-border/30"
-        )}>
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className={cn(
-              "animate-pulse",
-              viewMode === 'grid' 
-                ? "space-y-3" 
-                : "py-3 flex items-start space-x-3"
+          {/* View Toggle and Results */}
+          <ArticleViewModeChange mode={viewMode}/>
+        </div>
+
+        {/* Content */}
+        {blogPosts.length === 0 ? (
+            <div className="text-center py-16">
+              <div
+                  className="w-16 h-16 bg-secondary/60 rounded-full flex items-center justify-center mx-auto mb-4">
+                <HugeiconsIcon icon={PlusSignIcon} size={32} className="text-muted-foreground"/>
+              </div>
+              <h3 className="text-lg font-medium text-foreground mb-2">
+                {searchStr ? 'No articles found' : 'No articles yet'}
+              </h3>
+              <p className="text-muted-foreground mb-6">
+                {searchStr
+                    ? `No articles match "${searchStr}". Try a different search term.`
+                    : 'Start building your reading library by adding your first article.'
+                }
+              </p>
+            </div>
+        ) : (
+            <div className={cn(
+                "transition-all duration-300",
+                viewMode === 'grid'
+                    ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"
+                    : "divide-y divide-border/30"
             )}>
-              {viewMode === 'grid' ? (
-                <>
-                  <div className="bg-secondary/30 aspect-[16/10] rounded-xl"></div>
-                  <div className="space-y-2">
-                    <div className="bg-secondary/30 h-4 rounded"></div>
-                    <div className="bg-secondary/30 h-3 w-3/4 rounded"></div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="bg-secondary/30 w-16 h-16 rounded-lg flex-shrink-0"></div>
-                  <div className="flex-1 space-y-1">
-                    <div className="bg-secondary/30 h-4 rounded"></div>
-                    <div className="bg-secondary/30 h-3 w-2/3 rounded"></div>
-                  </div>
-                  <div className="bg-secondary/30 w-8 h-8 rounded-full flex-shrink-0"></div>
-                </>
-              )}
+              {blogPosts.map((post) => (
+                  viewMode === 'grid' ? (
+                      <BlogPostCard
+                          key={post.id}
+                          post={post}
+                          className="animate-fade-in"
+                      />
+                  ) : (
+                      <BlogPostListItem
+                          key={post.id}
+                          post={post}
+                          className="animate-fade-in"
+                      />
+                  )
+              ))}
             </div>
-          ))}
-        </div>
-      ) : filteredBookmarks.length === 0 ? (
-        <div className="text-center py-16">
-          <div className="w-16 h-16 bg-secondary/60 rounded-full flex items-center justify-center mx-auto mb-4">
-            <HugeiconsIcon icon={BookmarkAdd01Icon} size={32} className="text-muted-foreground" />
-          </div>
-          <h3 className="text-lg font-medium text-foreground mb-2">
-            {searchQuery ? 'No bookmarks found' : 'No bookmarks yet'}
-          </h3>
-          <p className="text-muted-foreground mb-6">
-            {searchQuery 
-              ? `No bookmarks match "${searchQuery}". Try a different search term.`
-              : 'Start bookmarking articles you want to read later.'
-            }
-          </p>
-          {!searchQuery && (
-            <Button 
-              className="bg-primary text-white hover:bg-primary/90 rounded-xl"
-              onClick={() => openAddBlogPostModal(handlePostAdded)}
-            >
-              <HugeiconsIcon icon={PlusSignIcon} size={16} className="mr-2" />
-              Add Your First Article
-            </Button>
-          )}
-        </div>
-      ) : (
-        <div className={cn(
-          "transition-all duration-300",
-          viewMode === 'grid' 
-            ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6" 
-            : "divide-y divide-border/30"
-        )}>
-          {filteredBookmarks.map((bookmark) => (
-            viewMode === 'grid' ? (
-              <BlogPostCard
-                key={bookmark.id}
-                post={bookmark}
-                onBookmarkToggle={handleBookmarkToggle}
-                className="animate-fade-in"
-              />
-            ) : (
-              <BlogPostListItem
-                key={bookmark.id}
-                post={bookmark}
-                onBookmarkToggle={handleBookmarkToggle}
-                className="animate-fade-in"
-              />
-            )
-          ))}
-        </div>
-      )}
-    </div>
+        )}
+
+        {/* Pagination */}
+        {blogPosts.length > 0 && pagination.total_page > 1 && (
+            <ArticlePagination pagination={pagination}/>
+        )}
+
+      </div>
   )
 }
