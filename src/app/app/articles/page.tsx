@@ -1,13 +1,13 @@
-import {Button} from '@/components/ui/button'
-import {Input} from '@/components/ui/input'
 import {HugeiconsIcon} from '@hugeicons/react'
-import {Grid02Icon, Menu02Icon, PlusSignIcon, Search01Icon} from '@hugeicons/core-free-icons'
+import {PlusSignIcon} from '@hugeicons/core-free-icons'
 import {BlogPostCard} from '@/components/blog-post-card'
 import {BlogPostListItem} from '@/components/blog-post-list-item'
 import {cn} from '@/lib/utils'
 import {BlogPost} from "@/types/blog-post";
 import {cookies} from "next/headers";
 import ArticlesAddButton from "@/components/articles-add-button";
+import ArticleSearchBox from "@/components/article-search-box";
+import ArticleViewModeChange from "@/components/article-view-mode-change";
 
 type PageProps = {
     page?: string;
@@ -48,59 +48,10 @@ export default async function Page(props: { searchParams: Promise<PageProps> }) 
                 </div>
 
                 {/* Search */}
-                <div className="relative">
-                    <HugeiconsIcon
-                        icon={Search01Icon}
-                        size={18}
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
-                    />
-                    <Input
-                        type="search"
-                        placeholder="Search articles..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 h-12 bg-background/50 border-border/30 focus:border-primary/50 focus:ring-primary/20 rounded-xl text-sm"
-                    />
-                </div>
+                <ArticleSearchBox/>
 
                 {/* View Toggle and Results */}
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <div className="flex items-center bg-secondary/30 rounded-lg p-1">
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className={cn(
-                                    "h-8 px-3 rounded-md transition-all",
-                                    viewMode === 'grid'
-                                        ? "bg-background shadow-sm text-foreground"
-                                        : "text-muted-foreground hover:text-foreground"
-                                )}
-                                onClick={() => setViewMode('grid')}
-                            >
-                                <HugeiconsIcon icon={Grid02Icon} size={16}/>
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className={cn(
-                                    "h-8 px-3 rounded-md transition-all",
-                                    viewMode === 'list'
-                                        ? "bg-background shadow-sm text-foreground"
-                                        : "text-muted-foreground hover:text-foreground"
-                                )}
-                                onClick={() => setViewMode('list')}
-                            >
-                                <HugeiconsIcon icon={Menu02Icon} size={16}/>
-                            </Button>
-                        </div>
-                    </div>
-
-                    <p className="text-sm text-muted-foreground">
-                        {loading ? 'Loading...' : `${filteredPosts.length} article${filteredPosts.length !== 1 ? 's' : ''}`}
-                        {searchQuery && ` found for "${searchQuery}"`}
-                    </p>
-                </div>
+                <ArticleViewModeChange mode={viewMode}/>
             </div>
 
             {/* Content */}
