@@ -91,7 +91,7 @@ export default async function Page() {
                 </div>
 
                 {stats?.recentPosts && stats.recentPosts.length > 0 ? (
-                    <div className="divide-y divide-border/30">
+                    <div className="flex flex-col divide-y divide-border/30 gap-2">
                         {stats.recentPosts.map((post) => (
                             <DashboardRecentPost key={post.id} post={post}/>
                         ))}

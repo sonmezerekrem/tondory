@@ -1,8 +1,5 @@
-'use client'
-
-import {Button} from '@/components/ui/button'
 import {HugeiconsIcon} from '@hugeicons/react'
-import {BookOpen01Icon, Link02Icon} from '@hugeicons/core-free-icons'
+import {BookOpen01Icon} from '@hugeicons/core-free-icons'
 import {BlogPost} from '@/types/blog-post'
 import Link from 'next/link'
 
@@ -11,10 +8,9 @@ type Props = {
 }
 
 const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-    })
+    const date = new Date(dateString)
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    return `${months[date.getMonth()]} ${date.getDate()}`
 }
 
 export default function DashboardRecentPost({post}: Props) {
@@ -30,7 +26,7 @@ export default function DashboardRecentPost({post}: Props) {
                     {post.image_url ? (
                         <img
                             src={post.image_url}
-                            alt={post.title}
+                            alt={post.title || 'Article image'}
                             className="w-full h-full object-cover"
                         />
                     ) : (
