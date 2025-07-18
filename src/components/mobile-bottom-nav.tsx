@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { DashboardSquare02Icon,BookmarkAdd01Icon, BookOpen01Icon, Settings02Icon, PlusSignIcon } from '@hugeicons/core-free-icons'
+import { DashboardSquare02Icon,Bookmark02Icon, BookOpen01Icon, Settings02Icon, AddCircleIcon } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -21,15 +21,15 @@ const navigation = [
     icon: BookOpen01Icon
   },
   { 
-    name: 'Add', 
+    name: 'Add',
     href: '/app/articles',
-    icon: PlusSignIcon,
+    icon: AddCircleIcon,
     isAction: true
   },
     { 
     name: 'Bookmarks', 
     href: '/app/bookmarks', 
-    icon: BookmarkAdd01Icon
+    icon: Bookmark02Icon
   },
   { 
     name: 'Settings', 
@@ -53,14 +53,43 @@ export function MobileBottomNav() {
           
           if (item.isAction) {
             return (
-              <Button
-                key={item.name}
-                size="sm"
-                className="w-12 h-12 rounded-full bg-primary hover:bg-primary/90 shadow-lg"
-                onClick={() => openAddBlogPostModal()}
-              >
-                <HugeiconsIcon icon={item.icon} size={36} className="text-white" />
-              </Button>
+                <div key={item.name} className="flex-1">
+                  <Button
+                      onClick={() => openAddBlogPostModal()}
+                      disabled= {item.disabled}
+                      variant="ghost"
+                      className={cn(
+                          "flex flex-col items-center space-y-1 h-auto py-2 w-full transition-colors",
+                          isActive
+                              ? "text-primary"
+                              : "text-muted-foreground hover:text-foreground"
+                      )}
+                  >
+                    <HugeiconsIcon
+                        icon={item.icon}
+                        size={24}
+                        className={cn(
+                            "transition-colors",
+                            isActive ? "text-primary" : "text-muted-foreground"
+                        )}
+                    />
+                    <span className={cn(
+                        "text-xs font-medium transition-colors",
+                        isActive ? "text-primary" : "text-muted-foreground"
+                    )}>
+                  {item.name}
+                </span>
+                  </Button>
+                </div>
+              //
+              // <Button
+              //   key={item.name}
+              //   size="sm"
+              //   className="w-12 h-12 rounded-full bg-primary hover:bg-primary/90 shadow-lg"
+              //   onClick={() => openAddBlogPostModal()}
+              // >
+              //   <HugeiconsIcon icon={item.icon} size={36} className="text-white" />
+              // </Button>
             )
           }
           
@@ -91,7 +120,6 @@ export function MobileBottomNav() {
                 )}>
                   {item.name}
                 </span>
-            
               </Button>
             </Link>
           )

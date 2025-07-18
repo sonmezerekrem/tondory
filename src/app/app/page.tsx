@@ -17,7 +17,7 @@ import {cookies} from "next/headers";
 
 export default async function Page() {
     const cookieStore = await cookies()
-    
+
     const user: User = await fetch(
         `${process.env.BACKEND_URL}/api/user`, {
             cache: "no-store",
@@ -27,8 +27,6 @@ export default async function Page() {
             },
         }).then(res => res.json())
 
-    console.log("user", user)
-
     const stats: BlogPostStats = await fetch(
         `${process.env.BACKEND_URL}/api/blog-posts/stats`, {
             cache: "no-store",
@@ -37,8 +35,6 @@ export default async function Page() {
                 'Content-Type': 'application/json',
             },
         }).then(res => res.json())
-
-    console.log("stats", stats)
 
     const getTimeGreeting = () => {
         const hour = new Date().getHours()
@@ -54,7 +50,7 @@ export default async function Page() {
                 <div>
                     <div className="flex items-center space-x-3 mb-2">
                         <h1 className="text-2xl font-bold text-foreground">
-                            {getTimeGreeting()}, {user?.email?.split('@')[0] || 'Reader'}!
+                            {getTimeGreeting()},  {user.name || user.email?.split('@')[0] || 'Reader'}!
                         </h1>
                     </div>
                     <p className="text-sm text-muted-foreground">

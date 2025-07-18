@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { ArrowRight01Icon, BookOpen01Icon, User02Icon, DashboardSquare02Icon, ChartIncreaseIcon, CheckmarkCircle02Icon } from '@hugeicons/core-free-icons'
+import { ArrowRight01Icon, BookOpen01Icon,BoatIcon, User02Icon, DashboardSquare02Icon, ChartIncreaseIcon, CheckmarkCircle02Icon } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 
 export default function Home() {
@@ -13,7 +13,7 @@ export default function Home() {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-              <HugeiconsIcon icon={BookOpen01Icon} size={24} className="text-white" />
+              <HugeiconsIcon icon={BoatIcon} size={24} className="text-white" />
             </div>
             <h1 className="text-2xl font-bold text-foreground">Tondory</h1>
           </div>
@@ -106,7 +106,7 @@ export default function Home() {
                 </div>
                 <CardTitle className="text-xl font-semibold">Smart Bookmarking</CardTitle>
                 <CardDescription className="text-muted-foreground">
-                  Automatically fetch article metadata, images, and descriptions. Just paste the URL and we'll handle the rest.
+                  Automatically fetch article metadata, images, and descriptions. Just paste the URL and we&#39;ll handle the rest.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -142,7 +142,7 @@ export default function Home() {
                 </div>
                 <CardTitle className="text-xl font-semibold">Easy Organization</CardTitle>
                 <CardDescription className="text-muted-foreground">
-                  Organize your articles by date, source, or topic. Find what you're looking for quickly and easily.
+                  Organize your articles by date, source, or topic. Find what you&#39;re looking for quickly and easily.
                 </CardDescription>
               </CardHeader>
             </Card>

@@ -23,7 +23,7 @@ export default function DashboardStatCard({title, subtitle, data, icon}: Props) 
                     <p className="text-xs text-muted-foreground">{subtitle}</p>
                 </div>
             </div>
-            <div className="text-2xl font-bold text-primary">
+            <div className="text-2xl font-bold text-primary text-center">
                 {data || 0}
             </div>
         </div>

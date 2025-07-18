@@ -2,7 +2,7 @@
 
 import {Input} from '@/components/ui/input'
 import {HugeiconsIcon} from '@hugeicons/react'
-import {BookOpen01Icon, Search01Icon, User02Icon} from '@hugeicons/core-free-icons'
+import {BoatIcon, Search01Icon, User02Icon} from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 import {ModeToggle} from '@/components/mode-toggle'
 
@@ -22,7 +22,7 @@ export function AppHeader({user}: AppHeaderProps) {
 
                         <Link href="/app" className="flex items-center space-x-3">
                             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                                <HugeiconsIcon icon={BookOpen01Icon} size={20} className="text-white"/>
+                                <HugeiconsIcon icon={BoatIcon} size={20} className="text-white"/>
                             </div>
                             <span className="text-xl font-bold text-foreground hidden sm:block">Tondory</span>
                         </Link>
