@@ -1,71 +1,74 @@
 'use client'
 
-import { useState } from 'react'
-import { Input } from '@/components/ui/input'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { BookOpen01Icon, Search01Icon, User02Icon } from '@hugeicons/core-free-icons'
+import {Input} from '@/components/ui/input'
+import {HugeiconsIcon} from '@hugeicons/react'
+import {BookOpen01Icon, Search01Icon, User02Icon} from '@hugeicons/core-free-icons'
 import Link from 'next/link'
+import {ModeToggle} from '@/components/mode-toggle'
 
 interface AppHeaderProps {
-  user: any
+    user: any
 }
 
-export function AppHeader({ user }: AppHeaderProps) {
-  return (
-    <header className="hidden lg:block bg-background border-b border-border/60 sticky top-0 z-50 backdrop-blur-sm bg-background/80">
-      <div className="px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo and Mobile Menu Button */}
-          <div className="flex items-center space-x-4">
-           
-            
-            <Link href="/app" className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <HugeiconsIcon icon={BookOpen01Icon} size={20} className="text-white" />
-              </div>
-              <span className="text-xl font-bold text-foreground hidden sm:block">Tondory</span>
-            </Link>
-          </div>
+export function AppHeader({user}: AppHeaderProps) {
+    return (
+        <header
+            className="hidden lg:block bg-background border-b border-border/60 sticky top-0 z-50 backdrop-blur-sm bg-background/80">
+            <div className="px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between h-16">
+                    {/* Logo and Mobile Menu Button */}
+                    <div className="flex items-center space-x-4">
 
-          {/* Search Bar */}
-          <div className="hidden md:flex flex-1 max-w-md mx-8">
-            <div className="relative w-full">
-              <HugeiconsIcon 
-                icon={Search01Icon} 
-                size={18} 
-                className="absolute left-3 top-2 text-muted-foreground" 
-              />
-              <Input
-                type="search"
-                placeholder="Search articles..."
-                className="pl-10 bg-secondary/50 border-border/60 focus:border-primary focus:ring-primary/20 rounded-xl"
-              />
-            </div>
-          </div>
 
-          {/* Right Side Actions */}
-          <div className="flex items-center space-x-3">
+                        <Link href="/app" className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                                <HugeiconsIcon icon={BookOpen01Icon} size={20} className="text-white"/>
+                            </div>
+                            <span className="text-xl font-bold text-foreground hidden sm:block">Tondory</span>
+                        </Link>
+                    </div>
 
-            {/* User Menu */}
-            <div className="flex items-center space-x-3">
-              <div className="hidden sm:flex items-center space-x-2">
-                <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                  <HugeiconsIcon icon={User02Icon} size={16} className="text-primary" />
+                    {/* Search Bar */}
+                    <div className="hidden md:flex flex-1 max-w-md mx-8">
+                        <div className="relative w-full">
+                            <HugeiconsIcon
+                                icon={Search01Icon}
+                                size={18}
+                                className="absolute left-3 top-2 text-muted-foreground"
+                            />
+                            <Input
+                                type="search"
+                                placeholder="Search articles..."
+                                className="pl-10 bg-secondary/50 border-border/60 focus:border-primary focus:ring-primary/20 rounded-xl"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Right Side Actions */}
+                    <div className="flex items-center space-x-3">
+                        {/* Dark Mode Toggle */}
+                        <ModeToggle/>
+
+                        {/* User Menu */}
+                        <div className="flex items-center space-x-3">
+                            <div className="hidden sm:flex items-center space-x-2">
+                                <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                                    <HugeiconsIcon icon={User02Icon} size={16} className="text-primary"/>
+                                </div>
+                                <div className="hidden lg:block">
+                                    <p className="text-sm font-medium text-foreground">
+                                        {user.user_metadata?.display_name || user.email?.split('@')[0]}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {user.email?.split('@')[0]}
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-                <div className="hidden lg:block">
-                  <p className="text-sm font-medium text-foreground">
-                    {user.user_metadata?.display_name || user.email?.split('@')[0]}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {user.email?.split('@')[0]}
-                  </p>
-                </div>
-              </div>
-              
             </div>
-          </div>
-        </div>
-      </div>
-    </header>
-  )
+        </header>
+    )
 }

@@ -3,7 +3,8 @@
     "allow": [
       "Bash(rm:*)",
       "Bash(npm install:*)",
-      "Bash(npx:*)"
+      "Bash(npx:*)",
+      "WebFetch(domain:ui.shadcn.com)"
     ],
     "deny": []
   }
