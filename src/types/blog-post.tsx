@@ -5,6 +5,8 @@ type BlogPost = {
     read_date: string
     image_url?: string
     url: string
+    description: string
+    isBookmarked?: boolean
 }
 
 export type { BlogPost }

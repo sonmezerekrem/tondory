@@ -1,18 +1,8 @@
 'use client'
 
 import React, { createContext, useContext, useState } from 'react'
+import {BlogPost} from "@/types/blog-post";
 
-interface BlogPost {
-  id: string
-  url: string
-  title: string
-  description: string
-  image_url: string
-  site_name: string
-  read_date: string
-  created_at: string
-  isBookmarked?: boolean
-}
 
 interface ModalContextType {
   isAddBlogPostModalOpen: boolean
