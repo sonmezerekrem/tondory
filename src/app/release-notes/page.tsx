@@ -4,6 +4,7 @@ import {Badge} from '@/components/ui/badge'
 import {HugeiconsIcon} from '@hugeicons/react'
 import {BoatIcon, Bug01Icon, CheckmarkCircle02Icon, PlusSignIcon, ZapIcon} from '@hugeicons/core-free-icons'
 import Link from 'next/link'
+import Footer from "@/components/footer";
 
 export default function ReleaseNotesPage() {
     return (
@@ -306,19 +307,7 @@ export default function ReleaseNotesPage() {
                 </section>
 
                 {/* Footer */}
-                <footer className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-border/60 mt-16">
-                    <div className="text-center">
-                        <div className="flex items-center justify-center space-x-3 mb-4">
-                            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                                <HugeiconsIcon icon={BoatIcon} size={16} className="text-white"/>
-                            </div>
-                            <span className="text-xl font-bold text-foreground">Tondory</span>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                            © 2024 Tondory. Built with Next.js and Supabase.
-                        </p>
-                    </div>
-                </footer>
+               <Footer/>
             </div>
         </div>
     )
