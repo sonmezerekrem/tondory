@@ -13,11 +13,18 @@ import DashboardRecentPost from '@/components/dashboard-recent-post'
 import {User} from "@/types/user";
 import {BlogPostStats} from "@/types/stats";
 import DashboardAddBlogButton from "@/components/dashboard-add-blog-button";
+import {cookies} from "next/headers";
 
 export default async function Page() {
+    const cookieStore = await cookies()
+    
     const user: User = await fetch(
         `${process.env.BACKEND_URL}/api/user`, {
             cache: "no-store",
+            headers: {
+                Cookie: cookieStore.toString(),
+                'Content-Type': 'application/json',
+            },
         }).then(res => res.json())
 
     console.log("user", user)
@@ -25,7 +32,10 @@ export default async function Page() {
     const stats: BlogPostStats = await fetch(
         `${process.env.BACKEND_URL}/api/blog-posts/stats`, {
             cache: "no-store",
-
+            headers: {
+                Cookie: cookieStore.toString(),
+                'Content-Type': 'application/json',
+            },
         }).then(res => res.json())
 
     console.log("stats", stats)

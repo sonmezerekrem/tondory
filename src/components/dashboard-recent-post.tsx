@@ -1,3 +1,5 @@
+'use client'
+
 import {Button} from '@/components/ui/button'
 import {HugeiconsIcon} from '@hugeicons/react'
 import {BookOpen01Icon, Link02Icon} from '@hugeicons/core-free-icons'
@@ -18,10 +20,10 @@ const formatDate = (dateString: string) => {
 export default function DashboardRecentPost({post}: Props) {
     return (
 
-        <div
+        <Link
+            href={post.url} target={'_blank'}
             key={post.id}
             className="py-3 hover:bg-secondary/20 transition-colors cursor-pointer group"
-            onClick={() => window.open(post.url, '_blank')}
         >
             <div className="flex items-start space-x-3">
                 <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
@@ -49,17 +51,7 @@ export default function DashboardRecentPost({post}: Props) {
                         <span>{formatDate(post.read_date)}</span>
                     </div>
                 </div>
-                <Link href={post.url} target="_blank">
-                <Button
-                    asChild
-                    variant="ghost"
-                    size="sm"
-                    className="w-8 h-8 rounded-full hover:bg-secondary/80 transition-all flex-shrink-0 opacity-0 group-hover:opacity-100"
-                >
-                        <HugeiconsIcon icon={Link02Icon} size={14} className="text-muted-foreground"/>
-                    </Button>
-                </Link>
             </div>
-        </div>
+        </Link>
     )
 }
