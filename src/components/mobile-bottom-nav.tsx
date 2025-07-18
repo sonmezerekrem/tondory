@@ -34,7 +34,8 @@ const navigation = [
   { 
     name: 'Settings', 
     href: '/app/settings', 
-    icon: Settings02Icon
+    icon: Settings02Icon,
+    disabled: false
   },
 ]
 
