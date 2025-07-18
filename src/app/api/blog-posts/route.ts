@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
       .from('blog_posts')
       .select(`
         *,
-        bookmarks!inner(id)
+        bookmarks(id)
       `)
       .eq('user_id', user.id)
 

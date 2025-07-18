@@ -2,7 +2,7 @@
 
 import {Button} from '@/components/ui/button'
 import {HugeiconsIcon} from '@hugeicons/react'
-import {BookmarkAdd01Icon, BookmarkRemove01Icon} from '@hugeicons/core-free-icons'
+import {Bookmark02Icon, BookmarkCheck02Icon} from '@hugeicons/core-free-icons'
 import {cn} from '@/lib/utils'
 import {BlogPost} from "@/types/blog-post";
 import {useState} from 'react'
@@ -46,11 +46,11 @@ export default function ArticleBookmarkButton({post, view}: Props) {
                 }}
             >
                 <HugeiconsIcon
-                    icon={bookmarked ? BookmarkRemove01Icon : BookmarkAdd01Icon}
+                    icon={bookmarked ? BookmarkCheck02Icon : Bookmark02Icon}
                     size={14}
                     className={cn(
                         "transition-colors",
-                        bookmarked ? "text-accent" : "text-muted-foreground"
+                        bookmarked ? "text-primary" : "text-muted-foreground"
                     )}
                 />
             </Button>
@@ -67,11 +67,11 @@ export default function ArticleBookmarkButton({post, view}: Props) {
                     }}
                 >
                     <HugeiconsIcon
-                        icon={bookmarked ? BookmarkRemove01Icon : BookmarkAdd01Icon}
+                        icon={bookmarked ? BookmarkCheck02Icon : Bookmark02Icon}
                         size={14}
                         className={cn(
                             "transition-colors",
-                            bookmarked ? "text-accent" : "text-muted-foreground"
+                            bookmarked ? "text-primary" : "text-muted-foreground"
                         )}
                     />
                 </Button>

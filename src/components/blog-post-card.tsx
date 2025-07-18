@@ -1,3 +1,5 @@
+'use client'
+
 import {HugeiconsIcon} from '@hugeicons/react'
 import {Link02Icon} from '@hugeicons/core-free-icons'
 import {cn} from '@/lib/utils'
