@@ -1,6 +1,6 @@
 'use client'
 
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {useRouter} from 'next/navigation'
 import {createClient} from '@/lib/supabase/client'
 import {Button} from '@/components/ui/button'
@@ -9,7 +9,7 @@ import {Input} from '@/components/ui/input'
 import {Label} from '@/components/ui/label'
 import {Badge} from '@/components/ui/badge'
 import {HugeiconsIcon} from '@hugeicons/react'
-import {ArrowRight01Icon, BoatIcon, SquareLock02Icon, UserIcon} from '@hugeicons/core-free-icons'
+import {ArrowRight01Icon, BoatIcon, Loading02Icon, SquareLock02Icon, UserIcon} from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 
 export default function LoginPage() {
@@ -17,8 +17,22 @@ export default function LoginPage() {
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+    const [checking, setChecking] = useState(true)
     const router = useRouter()
     const supabase = createClient()
+
+    // Check if user is already logged in
+    useEffect(() => {
+        const checkAuth = async () => {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (session) {
+                router.push('/app')
+                return
+            }
+            setChecking(false)
+        }
+        checkAuth()
+    }, [router, supabase.auth])
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -42,6 +56,15 @@ export default function LoginPage() {
         } finally {
             setLoading(false)
         }
+    }
+
+    // Show loading while checking auth
+    if (checking) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background flex items-center justify-center">
+                <HugeiconsIcon icon={Loading02Icon} size={32} className="mr-2 animate-spin text-primary" />
+            </div>
+        )
     }
 
     return (

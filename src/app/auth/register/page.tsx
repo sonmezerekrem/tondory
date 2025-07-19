@@ -1,6 +1,6 @@
 'use client'
 
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {useRouter} from 'next/navigation'
 import {createClient} from '@/lib/supabase/client'
 import {Button} from '@/components/ui/button'
@@ -12,7 +12,7 @@ import {HugeiconsIcon} from '@hugeicons/react'
 import {
     ArrowRight01Icon,
     BoatIcon,
-    CheckmarkCircle02Icon,
+    CheckmarkCircle02Icon, Loading02Icon,
     Mail01Icon,
     SquareLock02Icon,
     UserIcon
@@ -27,8 +27,22 @@ export default function RegisterPage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
+    const [checking, setChecking] = useState(true)
     const router = useRouter()
     const supabase = createClient()
+
+    // Check if user is already logged in
+    useEffect(() => {
+        const checkAuth = async () => {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (session) {
+                router.push('/app')
+                return
+            }
+            setChecking(false)
+        }
+        checkAuth()
+    }, [router, supabase.auth])
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -72,6 +86,15 @@ export default function RegisterPage() {
         } finally {
             setLoading(false)
         }
+    }
+
+    // Show loading while checking auth
+    if (checking) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background flex items-center justify-center">
+                <HugeiconsIcon icon={Loading02Icon} size={32} className="mr-2 animate-spin text-primary" />
+            </div>
+        )
     }
 
     return (
