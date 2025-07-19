@@ -50,7 +50,7 @@ export function MobileBottomNav() {
 
     return (
         <nav
-            className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-t border-border/60">
+            className="lg:hidden fixed bottom-2 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-t border-border/60">
             <div className="flex items-center justify-around px-4 py-2 safe-area-pb">
                 {navigation.map((item) => {
                     const isActive = item.exact
