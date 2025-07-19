@@ -87,7 +87,7 @@ export function PWAInstaller() {
       window.removeEventListener('appinstalled', handleAppInstalled)
       window.removeEventListener('force-pwa-install', handleForceInstall)
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInstall = async () => {
     if (!deferredPrompt) return

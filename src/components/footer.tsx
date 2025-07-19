@@ -18,6 +18,9 @@ export default function Footer() {
                     <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
                         About
                     </Link>
+                    <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+                        Terms of Service
+                    </Link>
                     <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
                         Privacy Policy
                     </Link>
