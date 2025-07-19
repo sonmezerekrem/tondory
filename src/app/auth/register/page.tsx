@@ -11,7 +11,7 @@ import {Badge} from '@/components/ui/badge'
 import {HugeiconsIcon} from '@hugeicons/react'
 import {
     ArrowRight01Icon,
-    BookOpen01Icon,
+    BoatIcon,
     CheckmarkCircle02Icon,
     Mail01Icon,
     SquareLock02Icon,
@@ -81,7 +81,7 @@ export default function RegisterPage() {
                 <div className="flex items-center justify-between">
                     <Link href="/" className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-                            <HugeiconsIcon icon={BookOpen01Icon} size={24} className="text-white"/>
+                            <HugeiconsIcon icon={BoatIcon} size={24} className="text-white"/>
                         </div>
                         <h1 className="text-2xl font-bold text-foreground">Tondory</h1>
                     </Link>
@@ -264,9 +264,13 @@ export default function RegisterPage() {
                     <div className="text-center mt-8">
                         <p className="text-xs text-muted-foreground max-w-sm mx-auto">
                             By creating an account, you agree to our{' '}
-                            <a href="#" className="text-primary hover:text-primary/80">Terms of Service</a>
+                            <Link href="/terms" className="text-primary hover:text-primary/80">
+                                Terms of Service
+                            </Link>
                             {' '}and{' '}
-                            <a href="#" className="text-primary hover:text-primary/80">Privacy Policy</a>
+                            <Link href="/privacy" className="text-primary hover:text-primary/80">
+                                Privacy Policy
+                            </Link>
                         </p>
                     </div>
                 </div>
