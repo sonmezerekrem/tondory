@@ -18,7 +18,7 @@ export default async function AppLayout({children,}: { children: React.ReactNode
     return (
         <ModalProvider>
             <SearchProvider>
-                <div className="min-h-screen bg-secondary/30">
+                <div className="min-h-screen bg-background">
                     <AppHeader user={user}/>
                     <div className="flex">
                         <AppSidebar/>
