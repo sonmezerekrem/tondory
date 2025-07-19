@@ -5,7 +5,6 @@ import {BlogPostListItem} from '@/components/blog-post-list-item'
 import {cn} from '@/lib/utils'
 import {BlogPost} from "@/types/blog-post";
 import {cookies} from "next/headers";
-import ArticlesAddButton from "@/components/articles-add-button";
 import ArticleSearchBox from "@/components/article-search-box";
 import ArticleViewModeChange from "@/components/article-view-mode-change";
 import {BlogPostsResponse} from "@/types/responses";
@@ -49,14 +48,15 @@ export default async function Page(props: { searchParams: Promise<PageProps> }) 
                             Manage your reading collection
                         </p>
                     </div>
-                    <ArticlesAddButton/>
                 </div>
 
-                {/* Search */}
-                <ArticleSearchBox/>
+                <div className={"flex gap-2 items-center"}>
+                    {/* Search */}
+                    <ArticleSearchBox/>
+                    {/* View Toggle and Results */}
+                    <ArticleViewModeChange mode={viewMode}/>
+                </div>
 
-                {/* View Toggle and Results */}
-                <ArticleViewModeChange mode={viewMode}/>
             </div>
 
             {/* Content */}

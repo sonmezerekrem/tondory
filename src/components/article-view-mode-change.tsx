@@ -21,7 +21,7 @@ export default function ArticleViewModeChange({mode}: ViewModeProps) {
 
     return (
 
-        <div className="flex items-center bg-secondary/30 rounded-lg p-1">
+        <div className="flex items-center bg-secondary/30 rounded-lg p-1 gap-1">
             <Button
                 variant="ghost"
                 size="sm"
@@ -29,7 +29,7 @@ export default function ArticleViewModeChange({mode}: ViewModeProps) {
                     "h-8 px-3 rounded-md transition-all",
                     mode === 'grid'
                         ? "bg-background shadow-sm text-foreground"
-                        : "text-muted-foreground hover:text-foreground"
+                        : "text-muted-foreground"
                 )}
                 onClick={() => handleClick('grid')}
             >
@@ -42,7 +42,7 @@ export default function ArticleViewModeChange({mode}: ViewModeProps) {
                     "h-8 px-3 rounded-md transition-all",
                     mode === 'list'
                         ? "bg-background shadow-sm text-foreground"
-                        : "text-muted-foreground hover:text-foreground"
+                        : "text-muted-foreground"
                 )}
                 onClick={() => handleClick('list')}
             >

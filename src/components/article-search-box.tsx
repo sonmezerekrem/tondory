@@ -30,7 +30,7 @@ export default function ArticleSearchBox() {
     }
 
     return (
-        <div className="relative">
+        <div className="relative flex-1">
             <HugeiconsIcon
                 icon={Search01Icon}
                 size={18}
