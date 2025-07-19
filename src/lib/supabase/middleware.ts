@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export const updateSession = async (request: NextRequest) => {
-  let supabaseResponse = NextResponse.next({
+  const supabaseResponse = NextResponse.next({
     request,
   })
 
@@ -15,13 +15,9 @@ export const updateSession = async (request: NextRequest) => {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({
-            request,
-          })
-          cookiesToSet.forEach(({ name, value, options }) =>
+          cookiesToSet.forEach(({ name, value, options }) => {
             supabaseResponse.cookies.set(name, value, options)
-          )
+          })
         },
       },
     }
@@ -35,11 +31,16 @@ export const updateSession = async (request: NextRequest) => {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Don't redirect API routes or auth routes - let them handle their own auth
   if (
     !user &&
     !request.nextUrl.pathname.startsWith('/auth') &&
     !request.nextUrl.pathname.startsWith('/api') &&
-    request.nextUrl.pathname !== '/'
+    request.nextUrl.pathname !== '/' &&
+    !request.nextUrl.pathname.startsWith('/about') &&
+    !request.nextUrl.pathname.startsWith('/privacy') &&
+    !request.nextUrl.pathname.startsWith('/terms') &&
+    !request.nextUrl.pathname.startsWith('/release-notes')
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone()
