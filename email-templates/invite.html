@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You're Invited to Tondory!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #334155;
+            background-color: #f8fafc;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffffff;
+            animation: confetti-fall 3s infinite;
+        }
+        
+        .confetti:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .confetti:nth-child(2) { left: 20%; animation-delay: 0.5s; background: #fbbf24; }
+        .confetti:nth-child(3) { left: 30%; animation-delay: 1s; background: #f87171; }
+        .confetti:nth-child(4) { left: 40%; animation-delay: 1.5s; background: #a78bfa; }
+        .confetti:nth-child(5) { left: 50%; animation-delay: 2s; }
+        .confetti:nth-child(6) { left: 60%; animation-delay: 0.7s; background: #06b6d4; }
+        .confetti:nth-child(7) { left: 70%; animation-delay: 1.2s; background: #fb7185; }
+        .confetti:nth-child(8) { left: 80%; animation-delay: 1.8s; background: #34d399; }
+        .confetti:nth-child(9) { left: 90%; animation-delay: 0.3s; background: #fbbf24; }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: #ffffff;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo svg {
+            width: 24px;
+            height: 24px;
+            fill: #22c55e;
+        }
+        
+        .header h1 {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            color: #dcfce7;
+            font-size: 16px;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .invitation-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .invitation-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        
+        .invitation-section h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+        
+        .invitation-section p {
+            font-size: 16px;
+            color: #64748b;
+            margin: 0;
+        }
+        
+        .inviter-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+            text-align: center;
+        }
+        
+        .inviter-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #22c55e, #4ade80);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .inviter-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+        
+        .inviter-info p {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin: 32px 0;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px -5px rgba(34, 197, 94, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px -5px rgba(34, 197, 94, 0.5);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .alternative-link {
+            margin-top: 24px;
+            padding: 20px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            border-left: 4px solid #22c55e;
+        }
+        
+        .alternative-link p {
+            font-size: 14px;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+        
+        .alternative-link code {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            font-size: 13px;
+            color: #0f172a;
+            word-break: break-all;
+        }
+        
+        .features-preview {
+            margin: 32px 0;
+            padding: 24px;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            border-radius: 12px;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .features-preview h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            color: #475569;
+        }
+        
+        .feature-item:before {
+            content: "🌟";
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 32px 0;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #22c55e;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .footer {
+            background: #f8fafc;
+            padding: 30px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        
+        .footer p {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+        
+        .footer a {
+            color: #22c55e;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .expiry-note {
+            margin-top: 24px;
+            padding: 16px;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+        }
+        
+        .expiry-note p {
+            font-size: 14px;
+            color: #92400e;
+            margin: 0;
+            text-align: center;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 8px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .footer {
+                padding: 20px;
+            }
+            
+            .cta-button {
+                padding: 14px 28px;
+                font-size: 15px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-section {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L13.09 8.26L20 9L13.09 15.74L12 22L10.91 15.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <h1>You're Invited!</h1>
+            <p>Join the Tondory reading community</p>
+        </div>
+        
+        <div class="content">
+            <div class="invitation-section">
+                <span class="invitation-icon">🎉</span>
+                <h2>Welcome to Tondory</h2>
+                <p>You've been personally invited to join our exclusive reading platform. Start organizing your articles today!</p>
+            </div>
+            
+            <div class="inviter-info">
+                <div class="inviter-avatar">
+                    {{ .InviterInitials }}
+                </div>
+                <h3>{{ .InviterName }}</h3>
+                <p>invited you to join Tondory</p>
+            </div>
+            
+            <div class="cta-section">
+                <a href="{{ .ConfirmationURL }}" class="cta-button">
+                    Accept Invitation
+                </a>
+            </div>
+            
+            <div class="alternative-link">
+                <p><strong>Button not working?</strong> Copy and paste this link into your browser:</p>
+                <code>{{ .ConfirmationURL }}</code>
+            </div>
+            
+            <div class="stats-section">
+                <div class="stat-item">
+                    <span class="stat-number">10K+</span>
+                    <span class="stat-label">Articles Saved</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Active Readers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">99%</span>
+                    <span class="stat-label">Satisfaction</span>
+                </div>
+            </div>
+            
+            <div class="features-preview">
+                <h3>What you'll get with Tondory</h3>
+                <div class="feature-grid">
+                    <div class="feature-item">Smart article saving</div>
+                    <div class="feature-item">Beautiful reading dashboard</div>
+                    <div class="feature-item">Advanced search & filters</div>
+                    <div class="feature-item">Reading analytics</div>
+                    <div class="feature-item">Cross-device sync</div>
+                    <div class="feature-item">Privacy-focused design</div>
+                </div>
+            </div>
+            
+            <div class="expiry-note">
+                <p><strong>⏰ This invitation expires in 7 days</strong></p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>
+                Questions about your invitation? Contact us at <a href="mailto:support@tondory.com">support@tondory.com</a>
+            </p>
+            <p>
+                © 2025 Tondory. Building the future of reading.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Email Change - Tondory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #334155;
+            background-color: #f8fafc;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: #ffffff;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        
+        .logo svg {
+            width: 24px;
+            height: 24px;
+            fill: #f59e0b;
+        }
+        
+        .header h1 {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+        
+        .header p {
+            color: #fef3c7;
+            font-size: 16px;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .email-change-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .change-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        
+        .email-change-section h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+        
+        .email-change-section p {
+            font-size: 16px;
+            color: #64748b;
+            margin: 0;
+        }
+        
+        .email-details {
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+        
+        .email-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #fed7aa;
+        }
+        
+        .email-row:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .email-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #92400e;
+            min-width: 80px;
+        }
+        
+        .email-value {
+            font-size: 15px;
+            color: #0f172a;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            background: #ffffff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #fed7aa;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin: 32px 0;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px -5px rgba(245, 158, 11, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px -5px rgba(245, 158, 11, 0.5);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .alternative-link {
+            margin-top: 24px;
+            padding: 20px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .alternative-link p {
+            font-size: 14px;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+        
+        .alternative-link code {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            font-size: 13px;
+            color: #0f172a;
+            word-break: break-all;
+        }
+        
+        .security-info {
+            margin: 32px 0;
+            padding: 20px;
+            background: #f0f9ff;
+            border-radius: 8px;
+            border-left: 4px solid #0ea5e9;
+        }
+        
+        .security-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .security-info h3:before {
+            content: "🔐";
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        .security-info ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .security-info li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: #475569;
+        }
+        
+        .security-info li:before {
+            content: "•";
+            color: #0ea5e9;
+            font-weight: bold;
+            margin-right: 12px;
+            margin-top: 2px;
+        }
+        
+        .warning-box {
+            margin: 32px 0;
+            padding: 20px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+        }
+        
+        .warning-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #991b1b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .warning-box h3:before {
+            content: "⚠️";
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .warning-box p {
+            font-size: 14px;
+            color: #7f1d1d;
+            margin: 0;
+        }
+        
+        .footer {
+            background: #f8fafc;
+            padding: 30px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        
+        .footer p {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+        
+        .footer a {
+            color: #f59e0b;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .expiry-note {
+            margin-top: 24px;
+            padding: 16px;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+        }
+        
+        .expiry-note p {
+            font-size: 14px;
+            color: #92400e;
+            margin: 0;
+            text-align: center;
+        }
+        
+        .steps-section {
+            margin: 32px 0;
+        }
+        
+        .steps-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .step-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #f59e0b;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+        
+        .step-description {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 8px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .footer {
+                padding: 20px;
+            }
+            
+            .cta-button {
+                padding: 14px 28px;
+                font-size: 15px;
+            }
+            
+            .email-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .email-value {
+                width: 100%;
+                word-break: break-all;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L13.09 8.26L20 9L13.09 15.74L12 22L10.91 15.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <h1>Email Change Request</h1>
+            <p>Secure your account with email verification</p>
+        </div>
+        
+        <div class="content">
+            <div class="email-change-section">
+                <span class="change-icon">📧</span>
+                <h2>Confirm Your New Email</h2>
+                <p>We need to verify your new email address before updating your account.</p>
+            </div>
+            
+            <div class="email-details">
+                <div class="email-row">
+                    <span class="email-label">Current:</span>
+                    <span class="email-value">{{ .OldEmail }}</span>
+                </div>
+                <div class="email-row">
+                    <span class="email-label">New:</span>
+                    <span class="email-value">{{ .NewEmail }}</span>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <a href="{{ .ConfirmationURL }}" class="cta-button">
+                    Confirm Email Change
+                </a>
+            </div>
+            
+            <div class="alternative-link">
+                <p><strong>Button not working?</strong> Copy and paste this link into your browser:</p>
+                <code>{{ .ConfirmationURL }}</code>
+            </div>
+            
+            <div class="steps-section">
+                <h3>What happens next?</h3>
+                <div class="steps-list">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Click the confirmation button</div>
+                            <div class="step-description">This verifies that you own the new email address</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Your email is updated</div>
+                            <div class="step-description">You'll use your new email for all future logins</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Access with new email</div>
+                            <div class="step-description">All future notifications will be sent to your new address</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="security-info">
+                <h3>Security Information</h3>
+                <ul>
+                    <li>This change was requested from your account settings</li>
+                    <li>You'll continue to have access to all your saved articles</li>
+                    <li>Your reading history and preferences remain unchanged</li>
+                    <li>All account security settings stay intact</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h3>Didn't request this change?</h3>
+                <p>If you didn't request this email change, please contact our support team immediately. Your current email address will remain active until the change is confirmed.</p>
+            </div>
+            
+            <div class="expiry-note">
+                <p><strong>⏰ This confirmation link expires in 24 hours</strong> for your security</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>
+                Need help with your account? Contact us at <a href="mailto:support@tondory.com">support@tondory.com</a>
+            </p>
+            <p>
+                © 2025 Tondory. Securing your reading journey.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

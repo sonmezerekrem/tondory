@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Reauthentication - Tondory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #334155;
+            background-color: #f8fafc;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .security-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 2px, transparent 2px),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 2px, transparent 2px),
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 2px, transparent 2px),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 2px, transparent 2px);
+            background-size: 40px 40px;
+            animation: security-pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes security-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+        
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: #ffffff;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo svg {
+            width: 24px;
+            height: 24px;
+            fill: #06b6d4;
+        }
+        
+        .header h1 {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            color: #cffafe;
+            font-size: 16px;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .auth-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .shield-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        
+        .auth-section h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+        
+        .auth-section p {
+            font-size: 16px;
+            color: #64748b;
+            margin: 0;
+        }
+        
+        .action-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+            text-align: center;
+        }
+        
+        .action-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .action-info h3:before {
+            content: "🔐";
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        .action-info p {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0;
+        }
+        
+        .token-section {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+            text-align: center;
+        }
+        
+        .token-label {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .token-code {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.2em;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 2px solid rgba(6, 182, 212, 0.3);
+            border-radius: 8px;
+            display: inline-block;
+        }
+        
+        .token-info {
+            font-size: 14px;
+            color: #cbd5e1;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin: 32px 0;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px -5px rgba(6, 182, 212, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px -5px rgba(6, 182, 212, 0.5);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .alternative-link {
+            margin-top: 24px;
+            padding: 20px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            border-left: 4px solid #06b6d4;
+        }
+        
+        .alternative-link p {
+            font-size: 14px;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+        
+        .alternative-link code {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            font-size: 13px;
+            color: #0f172a;
+            word-break: break-all;
+        }
+        
+        .security-notice {
+            margin: 32px 0;
+            padding: 20px;
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .security-notice h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .security-notice h3:before {
+            content: "⚡";
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .security-notice ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .security-notice li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #92400e;
+        }
+        
+        .security-notice li:before {
+            content: "•";
+            color: #f59e0b;
+            font-weight: bold;
+            margin-right: 8px;
+            margin-top: 2px;
+        }
+        
+        .footer {
+            background: #f8fafc;
+            padding: 30px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        
+        .footer p {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+        
+        .footer a {
+            color: #06b6d4;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .expiry-note {
+            margin-top: 24px;
+            padding: 16px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+        }
+        
+        .expiry-note p {
+            font-size: 14px;
+            color: #991b1b;
+            margin: 0;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 32px 0;
+        }
+        
+        .step-item {
+            text-align: center;
+            padding: 20px 16px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #06b6d4;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin: 0 auto 12px;
+        }
+        
+        .step-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+        
+        .step-description {
+            font-size: 12px;
+            color: #64748b;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 8px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .footer {
+                padding: 20px;
+            }
+            
+            .cta-button {
+                padding: 14px 28px;
+                font-size: 15px;
+            }
+            
+            .token-code {
+                font-size: 24px;
+                padding: 12px;
+            }
+            
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="security-pattern"></div>
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 1L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 1Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+            </div>
+            <h1>Confirm Reauthentication</h1>
+            <p>Verify your identity for secure access</p>
+        </div>
+        
+        <div class="content">
+            <div class="auth-section">
+                <span class="shield-icon">🛡️</span>
+                <h2>Identity Verification Required</h2>
+                <p>For your security, we need to confirm your identity before proceeding with this sensitive action.</p>
+            </div>
+            
+            <div class="action-info">
+                <h3>Secure Action Request</h3>
+                <p>This verification is required for account security and data protection</p>
+            </div>
+            
+            <div class="token-section">
+                <div class="token-label">Your Verification Code</div>
+                <div class="token-code">{{ .Token }}</div>
+                <div class="token-info">Enter this code to confirm your identity</div>
+            </div>
+            
+            <div class="steps-grid">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Copy Code</div>
+                    <div class="step-description">Copy the code above</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Return to App</div>
+                    <div class="step-description">Go back to Tondory</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Enter Code</div>
+                    <div class="step-description">Paste and submit</div>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <a href="{{ .ConfirmationURL }}" class="cta-button">
+                    Confirm Identity
+                </a>
+            </div>
+            
+            <div class="alternative-link">
+                <p><strong>Button not working?</strong> Copy and paste this link into your browser:</p>
+                <code>{{ .ConfirmationURL }}</code>
+            </div>
+            
+            <div class="security-notice">
+                <h3>Important Security Information</h3>
+                <ul>
+                    <li>This code is unique to your account and session</li>
+                    <li>Never share this code with anyone else</li>
+                    <li>Tondory staff will never ask for this code</li>
+                    <li>Only enter this code on the official Tondory website</li>
+                </ul>
+            </div>
+            
+            <div class="expiry-note">
+                <p>⏰ This verification code expires in 10 minutes for your security</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>
+                Security concerns? Contact us at <a href="mailto:security@tondory.com">security@tondory.com</a>
+            </p>
+            <p>
+                © 2025 Tondory. Protecting your reading journey.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
