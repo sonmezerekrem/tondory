@@ -3,6 +3,8 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { Logout01Icon, User02Icon, Settings02Icon } from '@hugeicons/core-free-icons'
 import { createClient } from '@/lib/supabase/server'
 import ProfileEditForm from '@/components/profile-edit-form'
+import { ThemeToggle } from '@/components/theme-toggle'
+import { DeleteAccountDialog } from '@/components/delete-account-dialog'
 
 export default async function SettingsPage() {
   const supabase = await createClient()
@@ -74,33 +76,52 @@ export default async function SettingsPage() {
           </div>
         </div>
 
-        <div className="pl-13">
-          <div className="text-sm text-muted-foreground bg-secondary/20 rounded-lg p-4 border border-border/30">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 rounded-full bg-accent"></div>
-              <span>Preference settings will be available in future updates.</span>
-            </div>
+        <div className="pl-13 space-y-4">
+          <div className="bg-card border border-border rounded-lg p-4">
+            <ThemeToggle />
           </div>
         </div>
       </div>
 
-      {/* Logout Section */}
+      {/* Account Actions Section */}
       <div className="space-y-6 pt-4 border-t border-border/60">
         <div>
           <h2 className="text-lg font-semibold text-foreground">Account Actions</h2>
-          <p className="text-sm text-muted-foreground">Manage your session</p>
+          <p className="text-sm text-muted-foreground">Manage your session and account</p>
         </div>
 
-        <form action="/auth/logout" method="post">
-          <Button 
-            variant="outline" 
-            type="submit" 
-            className="w-full sm:w-auto border-destructive/30 text-destructive hover:bg-destructive/10 hover:border-destructive/60 transition-all"
-          >
-            <HugeiconsIcon icon={Logout01Icon} size={16} className="mr-2" />
-            Sign Out
-          </Button>
-        </form>
+        <div className="space-y-4">
+          <form action="/auth/logout" method="post">
+            <Button 
+              variant="outline" 
+              type="submit" 
+              className="w-full sm:w-auto border-destructive/30 text-destructive hover:bg-destructive/10 hover:border-destructive/60 transition-all"
+            >
+              <HugeiconsIcon icon={Logout01Icon} size={16} className="mr-2" />
+              Sign Out
+            </Button>
+          </form>
+        </div>
+      </div>
+
+      {/* Danger Zone */}
+      <div className="space-y-6 pt-4 border-t border-destructive/20">
+        <div>
+          <h2 className="text-lg font-semibold text-destructive">Danger Zone</h2>
+          <p className="text-sm text-muted-foreground">Irreversible and destructive actions</p>
+        </div>
+
+        <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+            <div>
+              <h5 className="font-semibold text-foreground">Delete Account</h5>
+              <p className="text-sm text-muted-foreground">
+                Permanently delete your account and all associated data. This action cannot be undone.
+              </p>
+            </div>
+            <DeleteAccountDialog />
+          </div>
+        </div>
       </div>
     </div>
   )

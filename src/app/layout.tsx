@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { PWAInstaller } from "@/components/pwa-installer";
+import { Toaster } from "sonner";
 
 const sansFont = Urbanist({
     subsets: ["latin"],
@@ -87,6 +88,7 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
           <ServiceWorkerRegister />
           {children}
           <PWAInstaller />
+          <Toaster position="top-right" richColors />
         </ThemeProvider>
         </body>
         </html>
