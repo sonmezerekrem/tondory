@@ -1,6 +1,6 @@
-const CACHE_NAME = 'tondory-v1';
-const STATIC_CACHE_NAME = 'tondory-static-v1';
-const DYNAMIC_CACHE_NAME = 'tondory-dynamic-v1';
+const CACHE_NAME = 'tondory-v2';
+const STATIC_CACHE_NAME = 'tondory-static-v2';
+const DYNAMIC_CACHE_NAME = 'tondory-dynamic-v2';
 
 const STATIC_ASSETS = [
   '/',
@@ -63,60 +63,68 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Handle API requests
-  if (url.pathname.startsWith('/api/')) {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          // Cache successful API responses for offline access
-          if (response.status === 200) {
-            const responseClone = response.clone();
-            caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
-              cache.put(request, responseClone);
-            });
-          }
-          return response;
-        })
-        .catch(() => {
-          // Return cached response if available
-          return caches.match(request);
-        })
-    );
+  // Skip requests to different origins
+  if (url.origin !== location.origin) {
     return;
   }
 
-  // Handle page requests
-  event.respondWith(
-    caches.match(request)
-      .then((cachedResponse) => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
+  // Skip auth routes - let them handle redirects naturally
+  if (url.pathname.startsWith('/auth/')) {
+    return;
+  }
 
-        return fetch(request)
-          .then((response) => {
-            // Don't cache non-successful responses
-            if (!response || response.status !== 200 || response.type !== 'basic') {
+  // Skip API requests - let them handle their own caching and errors
+  if (url.pathname.startsWith('/api/')) {
+    return;
+  }
+
+  // Skip middleware-handled routes that might redirect
+  if (url.pathname.startsWith('/app/') || url.pathname === '/app') {
+    return;
+  }
+
+  // Only handle static assets and public pages
+  if (
+    url.pathname === '/' ||
+    url.pathname.startsWith('/about') ||
+    url.pathname.startsWith('/privacy') ||
+    url.pathname.startsWith('/terms') ||
+    url.pathname.startsWith('/release-notes') ||
+    url.pathname.includes('.') // static files
+  ) {
+    event.respondWith(
+      caches.match(request)
+        .then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+
+          return fetch(request)
+            .then((response) => {
+              // Don't cache redirects or errors
+              if (!response || response.status >= 300 || response.type !== 'basic') {
+                return response;
+              }
+
+              // Cache successful responses
+              const responseToCache = response.clone();
+              caches.open(DYNAMIC_CACHE_NAME)
+                .then((cache) => {
+                  cache.put(request, responseToCache);
+                });
+
               return response;
-            }
-
-            // Cache the response
-            const responseToCache = response.clone();
-            caches.open(DYNAMIC_CACHE_NAME)
-              .then((cache) => {
-                cache.put(request, responseToCache);
-              });
-
-            return response;
-          })
-          .catch(() => {
-            // Return offline page for navigation requests
-            if (request.mode === 'navigate') {
-              return caches.match('/');
-            }
-          });
-      })
-  );
+            })
+            .catch(() => {
+              // Return offline fallback for navigation requests
+              if (request.mode === 'navigate') {
+                return caches.match('/') || new Response('Offline', { status: 503 });
+              }
+              throw new Error('Network error');
+            });
+        })
+    );
+  }
 });
 
 // Background sync for offline actions
