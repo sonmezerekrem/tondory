@@ -26,38 +26,68 @@ export function PWAInstaller() {
 
     // Check if user has dismissed the prompt before
     const dismissed = localStorage.getItem('pwa-install-dismissed')
-    if (dismissed) {
-      return
+    const dismissedTime = localStorage.getItem('pwa-install-dismissed-time')
+    
+    // Reset dismissal after 7 days
+    if (dismissed && dismissedTime) {
+      const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000)
+      if (parseInt(dismissedTime) < sevenDaysAgo) {
+        localStorage.removeItem('pwa-install-dismissed')
+        localStorage.removeItem('pwa-install-dismissed-time')
+      } else {
+        return
+      }
     }
 
     const handleBeforeInstallPrompt = (e: Event) => {
+      console.log('beforeinstallprompt event fired')
       e.preventDefault()
       setDeferredPrompt(e as BeforeInstallPromptEvent)
-      setIsVisible(true)
+      
+      // Show prompt after 3 seconds instead of 30
+      setTimeout(() => {
+        setIsVisible(true)
+      }, 3000)
     }
 
     const handleAppInstalled = () => {
+      console.log('App installed')
       setIsInstalled(true)
       setIsVisible(false)
       setDeferredPrompt(null)
+      localStorage.removeItem('pwa-install-dismissed')
+      localStorage.removeItem('pwa-install-dismissed-time')
+    }
+
+    const handleForceInstall = () => {
+      console.log('Force install triggered')
+      if (deferredPrompt) {
+        setIsVisible(true)
+      } else {
+        // Show a fallback install instruction
+        setIsVisible(true)
+        console.log('No deferred prompt available - showing fallback')
+      }
     }
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
     window.addEventListener('appinstalled', handleAppInstalled)
+    window.addEventListener('force-pwa-install', handleForceInstall)
 
-    // Show prompt after 30 seconds if not dismissed
-    const timer = setTimeout(() => {
-      if (deferredPrompt && !isInstalled) {
-        setIsVisible(true)
-      }
-    }, 30000)
+    // Debug: Log current state
+    console.log('PWA Installer: Setup complete', {
+      isStandalone,
+      isInWebApp,
+      dismissed,
+      userAgent: navigator.userAgent
+    })
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
       window.removeEventListener('appinstalled', handleAppInstalled)
-      clearTimeout(timer)
+      window.removeEventListener('force-pwa-install', handleForceInstall)
     }
-  }, [deferredPrompt, isInstalled])
+  }, [])
 
   const handleInstall = async () => {
     if (!deferredPrompt) return
@@ -80,9 +110,10 @@ export function PWAInstaller() {
   const handleDismiss = () => {
     setIsVisible(false)
     localStorage.setItem('pwa-install-dismissed', 'true')
+    localStorage.setItem('pwa-install-dismissed-time', Date.now().toString())
   }
 
-  if (isInstalled || !isVisible || !deferredPrompt) {
+  if (isInstalled || !isVisible) {
     return null
   }
 
@@ -109,11 +140,19 @@ export function PWAInstaller() {
         </p>
         
         <div className="flex space-x-2">
-          <Button onClick={handleInstall} size="sm" className="flex-1">
-            Install App
-          </Button>
+          {deferredPrompt ? (
+            <Button onClick={handleInstall} size="sm" className="flex-1">
+              Install App
+            </Button>
+          ) : (
+            <div className="flex-1 text-xs text-muted-foreground">
+              <p className="mb-2">To install manually:</p>
+              <p>• Chrome: Menu → Install Tondory</p>
+              <p>• Mobile: Add to Home Screen</p>
+            </div>
+          )}
           <Button variant="outline" onClick={handleDismiss} size="sm">
-            Not now
+            {deferredPrompt ? "Not now" : "Got it"}
           </Button>
         </div>
       </div>
