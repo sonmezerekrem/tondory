@@ -29,6 +29,7 @@ export function BlogPostListItem({post, className}: BlogPostListItemProps) {
                 <div className="flex-shrink-0">
                     <div className="w-16 h-16 rounded-lg overflow-hidden">
                         {post.image_url ? (
+                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                                 src={post.image_url}
                                 alt={post.title}

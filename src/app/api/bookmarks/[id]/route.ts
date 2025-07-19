@@ -4,8 +4,10 @@ import { NextRequest, NextResponse } from 'next/server'
 // DELETE /api/bookmarks/[id] - Remove a bookmark by bookmark ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { params } = context
+  const resolvedParams = await params
   try {
     const supabase = await createClient()
     const { data: { user }, error: userError } = await supabase.auth.getUser()
@@ -14,7 +16,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const bookmarkId = params.id
+    const bookmarkId = resolvedParams.id
 
     // Delete bookmark (RLS will ensure user can only delete their own)
     const { error } = await supabase

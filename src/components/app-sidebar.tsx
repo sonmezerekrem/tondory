@@ -1,6 +1,5 @@
 'use client'
 
-import {useState} from 'react'
 import {Button} from '@/components/ui/button'
 import {Badge} from '@/components/ui/badge'
 import {HugeiconsIcon} from '@hugeicons/react'
@@ -50,7 +49,6 @@ const navigation = [
 
 export function AppSidebar() {
     const pathname = usePathname()
-    const [isCollapsed, setIsCollapsed] = useState(false)
     const {openAddBlogPostModal} = useModal()
 
     return (
@@ -58,7 +56,7 @@ export function AppSidebar() {
             {/* Desktop Sidebar */}
             <aside className={cn(
                 "fixed left-0 top-0 lg:top-16 z-40 h-screen lg:h-[calc(100vh-4rem)] bg-background border-r border-border/30 transition-all duration-300 hidden lg:block",
-                isCollapsed ? "w-16" : "w-64"
+                "w-64"
             )}>
                 <div className="flex flex-col h-full">
                     {/* Quick Action */}
@@ -68,13 +66,13 @@ export function AppSidebar() {
                             onClick={() => openAddBlogPostModal()}
                         >
                             <HugeiconsIcon icon={PlusSignIcon} size={16}
-                                           className={cn("text-white", isCollapsed ? "" : "mr-2")}/>
-                            {!isCollapsed && "Add Article"}
+                                           className={cn("text-white", "mr-2")}/>
+                            {"Add Article"}
                         </Button>
                     </div>
 
                     {/* Navigation */}
-                    <nav className={`flex-1 ${isCollapsed ? "px-2" : "px-4"} pb-4 space-y-2`}>
+                    <nav className={`flex-1 $ px-4 pb-4 space-y-2`}>
                         {navigation.map((item) => {
                             const isActive = item.exact
                                 ? pathname === item.href
@@ -107,7 +105,7 @@ export function AppSidebar() {
                                                     )}
                                                 />
                                             </div>
-                                            {!isCollapsed && (
+                                            {
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center justify-between">
                                                         <span className="font-medium text-sm">{item.name}</span>
@@ -119,7 +117,7 @@ export function AppSidebar() {
                                                         )}
                                                     </div>
                                                 </div>
-                                            )}
+                                            }
                                         </div>
                                     </div>
                                 </Link>
@@ -144,6 +142,6 @@ export function AppSidebar() {
                 </div>
             </aside>
 
-         </>
+        </>
     )
 }

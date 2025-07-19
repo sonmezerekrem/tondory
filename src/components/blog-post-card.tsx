@@ -28,6 +28,7 @@ export function BlogPostCard({post, className}: BlogPostCardProps) {
             {/* Article Image */}
             <div className="relative aspect-[16/10] overflow-hidden rounded-xl mb-3">
                 {post.image_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                         src={post.image_url}
                         alt={post.title}

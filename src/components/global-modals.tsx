@@ -2,11 +2,12 @@
 
 import { AddBlogPostModal } from '@/components/add-blog-post-modal'
 import { useModal } from '@/contexts/modal-context'
+import { BlogPost } from '@/types/blog-post'
 
 export function GlobalModals() {
   const { isAddBlogPostModalOpen, closeAddBlogPostModal, onPostAdded } = useModal()
 
-  const handlePostAdded = (newPost: any) => {
+  const handlePostAdded = (newPost: BlogPost) => {
     if (onPostAdded) {
       onPostAdded(newPost)
     }

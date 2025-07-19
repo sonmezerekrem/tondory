@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { Link02Icon, Calendar01Icon, Loading02Icon, Image01Icon } from '@hugeicons/core-free-icons'
+import { Link02Icon, Calendar01Icon, Loading02Icon } from '@hugeicons/core-free-icons'
 
 interface BlogPost {
   id: string
@@ -130,7 +130,7 @@ export function AddBlogPostModal({ isOpen, onClose, onPostAdded }: AddBlogPostMo
         <DialogHeader className="space-y-2">
           <DialogTitle className="text-xl font-bold">Add Article</DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground">
-            Enter the URL of an article you've read and we'll fetch the details for you.
+            Enter the URL of an article you&apos;ve read and we&apos;ll fetch the details for you.
           </DialogDescription>
         </DialogHeader>
 
@@ -198,6 +198,7 @@ export function AddBlogPostModal({ isOpen, onClose, onPostAdded }: AddBlogPostMo
                 <div className="flex items-start space-x-3">
                   {ogData.image && (
                     <div className="flex-shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={ogData.image}
                         alt={ogData.title}

@@ -24,6 +24,7 @@ export default function DashboardRecentPost({post}: Props) {
             <div className="flex items-start space-x-3">
                 <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                     {post.image_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                             src={post.image_url}
                             alt={post.title || 'Article image'}

@@ -14,7 +14,7 @@ export default function ArticleSearchBox() {
     useEffect(() => {
         const searchValue = searchParams.get("search") || ""
         setSearch(searchValue)
-    }, [])
+    }, [searchParams])
 
     const handleInputChange = (newSearch: string) => {
         setSearch(newSearch)

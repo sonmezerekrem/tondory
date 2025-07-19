@@ -46,6 +46,7 @@ export default function ProfileEditForm({ user }: Props) {
         window.location.reload()
       }
     } catch (error) {
+      console.error(error)
       setMessage('An unexpected error occurred')
     } finally {
       setIsLoading(false)

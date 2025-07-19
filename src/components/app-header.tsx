@@ -7,9 +7,10 @@ import Link from 'next/link'
 import {ModeToggle} from '@/components/mode-toggle'
 import {SearchResultsModal} from '@/components/search-results-modal'
 import {useSearchModal} from '@/contexts/search-context'
+import {User} from "@supabase/auth-js";
 
 interface AppHeaderProps {
-    user: any
+    user: User
 }
 
 export function AppHeader({user}: AppHeaderProps) {
