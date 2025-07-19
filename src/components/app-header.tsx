@@ -5,12 +5,16 @@ import {HugeiconsIcon} from '@hugeicons/react'
 import {BoatIcon, Search01Icon, User02Icon} from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 import {ModeToggle} from '@/components/mode-toggle'
+import {SearchResultsModal} from '@/components/search-results-modal'
+import {useSearchModal} from '@/contexts/search-context'
 
 interface AppHeaderProps {
     user: any
 }
 
 export function AppHeader({user}: AppHeaderProps) {
+    const { isSearchModalOpen, openSearchModal, closeSearchModal } = useSearchModal()
+
     return (
         <header
             className="hidden lg:block bg-background border-b border-border/60 sticky top-0 z-50 backdrop-blur-sm bg-background/80">
@@ -34,13 +38,18 @@ export function AppHeader({user}: AppHeaderProps) {
                             <HugeiconsIcon
                                 icon={Search01Icon}
                                 size={18}
-                                className="absolute left-3 top-2 text-muted-foreground"
+                                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground pointer-events-none"
                             />
                             <Input
-                                type="search"
+                                type="text"
                                 placeholder="Search articles..."
-                                className="pl-10 bg-secondary/50 border-border/60 focus:border-primary focus:ring-primary/20 rounded-xl"
+                                className="pl-10 pr-20 bg-secondary/50 border-border/60 hover:border-primary/50 focus:border-primary focus:ring-primary/20 rounded-xl cursor-pointer transition-colors"
+                                readOnly
+                                onClick={openSearchModal}
                             />
+                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-muted-foreground bg-secondary/80 px-2 py-1 rounded border border-border/60">
+                                ⌘K
+                            </div>
                         </div>
                     </div>
 
@@ -69,6 +78,12 @@ export function AppHeader({user}: AppHeaderProps) {
                     </div>
                 </div>
             </div>
+            
+            {/* Search Modal */}
+            <SearchResultsModal 
+                open={isSearchModalOpen} 
+                onOpenChange={(open) => open ? openSearchModal() : closeSearchModal()} 
+            />
         </header>
     )
 }
