@@ -39,7 +39,7 @@ export default function ArticleBookmarkButton({post, view}: Props) {
             <Button
                 variant="ghost"
                 size="sm"
-                className="absolute top-2 right-2 w-8 h-8 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background transition-all"
+                className="absolute top-2 right-10 w-8 h-8 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background transition-all"
                 onClick={(e) => {
                     e.stopPropagation()
                     handleBookmarkToggle(post.id)

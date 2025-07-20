@@ -5,6 +5,7 @@ import {Link02Icon} from '@hugeicons/core-free-icons'
 import {cn} from '@/lib/utils'
 import {BlogPost} from "@/types/blog-post";
 import ArticleBookmarkButton from "@/components/article-bookmark-button";
+import ArticleActionsMenu from "@/components/article-actions-menu";
 
 interface BlogPostListItemProps {
     post: BlogPost
@@ -59,8 +60,11 @@ export function BlogPostListItem({post, className}: BlogPostListItemProps) {
                     </div>
                 </div>
 
-                {/* Bookmark Button */}
-                <ArticleBookmarkButton post={post} view={'list'}/>
+                {/* Action Buttons */}
+                <div className="flex items-center gap-1">
+                    <ArticleBookmarkButton post={post} view={'list'}/>
+                    <ArticleActionsMenu post={post} view={'list'}/>
+                </div>
             </div>
         </div>
     )

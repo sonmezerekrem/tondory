@@ -5,6 +5,7 @@ import {Link02Icon} from '@hugeicons/core-free-icons'
 import {cn} from '@/lib/utils'
 import {BlogPost} from "@/types/blog-post";
 import ArticleBookmarkButton from "@/components/article-bookmark-button";
+import ArticleActionsMenu from "@/components/article-actions-menu";
 
 
 interface BlogPostCardProps {
@@ -41,8 +42,9 @@ export function BlogPostCard({post, className}: BlogPostCardProps) {
                     </div>
                 )}
 
-                {/* Bookmark Button */}
+                {/* Action Buttons */}
                 <ArticleBookmarkButton post={post} view={'grid'}/>
+                <ArticleActionsMenu post={post} view={'grid'}/>
             </div>
 
             {/* Content */}
