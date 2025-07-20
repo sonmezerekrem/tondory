@@ -30,7 +30,7 @@ export function ThemeToggle() {
   ]
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex gap-2 sm:gap-0 sm:items-center sm:justify-between flex-col sm:flex-row ">
       <div>
         <span className="text-sm font-medium text-foreground">Theme</span>
         <p className="text-xs text-muted-foreground">Choose your preferred color scheme</p>
