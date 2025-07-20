@@ -43,8 +43,12 @@ export function BlogPostCard({post, className}: BlogPostCardProps) {
                 )}
 
                 {/* Action Buttons */}
-                <ArticleBookmarkButton post={post} view={'grid'}/>
-                <ArticleActionsMenu post={post} view={'grid'}/>
+                <div className={"flex flex-row gap-10"}>
+                    <ArticleBookmarkButton post={post} view={'grid'}/>
+                    <ArticleActionsMenu post={post} view={'grid'}/>
+                </div>
+
+
             </div>
 
             {/* Content */}

@@ -58,14 +58,13 @@ export default function ArticleActionsMenu({ post, view, className }: ArticleAct
   const iconSize = view === 'grid' ? 16 : 14
 
   return (
-    <>
       <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
             size={buttonSize}
             className={cn(
-              "text-muted-foreground hover:text-foreground transition-all",
+              "text-muted-foreground hover:text-foreground transition-all rounded-full",
               view === 'grid' 
                 ? "absolute top-2 right-2 bg-background/80 backdrop-blur-sm hover:bg-background/90"
                 : "flex-shrink-0",
@@ -94,6 +93,5 @@ export default function ArticleActionsMenu({ post, view, className }: ArticleAct
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
   )
 }
