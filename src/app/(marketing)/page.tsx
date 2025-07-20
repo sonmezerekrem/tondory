@@ -14,8 +14,17 @@ import Link from 'next/link'
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import GradientBackgroundWrapper from "@/components/gradient-background-wrapper";
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 
-export default function Home() {
+export default async function Home() {
+    // Check if user is already logged in
+    const supabase = await createClient()
+    const { data: { session } } = await supabase.auth.getSession()
+    
+    if (session) {
+        redirect('/app')
+    }
     return (
         <GradientBackgroundWrapper>
             {/* Header */}
