@@ -41,7 +41,7 @@ export default function ArticleSearchBox() {
                 placeholder="Search articles..."
                 value={search}
                 onChange={e => handleInputChange(e.target.value)}
-                className="pl-10 h-12 bg-background/50 border-border/30 focus:border-primary/50 focus:ring-primary/20 rounded-xl text-sm"
+                className="pl-10 h-8 bg-background/50 border-border/30 focus:border-primary/50 focus:ring-primary/20 rounded-xl text-sm"
             />
         </div>
     )

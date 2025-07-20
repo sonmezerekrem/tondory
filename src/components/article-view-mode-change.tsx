@@ -26,7 +26,7 @@ export default function ArticleViewModeChange({mode}: ViewModeProps) {
                 variant="ghost"
                 size="sm"
                 className={cn(
-                    "h-8 px-3 rounded-md transition-all",
+                    "h-8 px-3 rounded-xl transition-all",
                     mode === 'grid'
                         ? "bg-background shadow-sm text-foreground"
                         : "text-muted-foreground"
@@ -39,7 +39,7 @@ export default function ArticleViewModeChange({mode}: ViewModeProps) {
                 variant="ghost"
                 size="sm"
                 className={cn(
-                    "h-8 px-3 rounded-md transition-all",
+                    "h-8 px-3 rounded-xl transition-all",
                     mode === 'list'
                         ? "bg-background shadow-sm text-foreground"
                         : "text-muted-foreground"
