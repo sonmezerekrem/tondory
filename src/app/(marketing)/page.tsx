@@ -70,20 +70,20 @@ export default async function Home() {
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-3 gap-4 sm:gap-8 max-w-md mx-auto mb-16">
-                        <div className="text-center">
-                            <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">1K+</div>
-                            <div className="text-sm text-muted-foreground">Articles Saved</div>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">50+</div>
-                            <div className="text-sm text-muted-foreground">Active Users</div>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">99%</div>
-                            <div className="text-sm text-muted-foreground">Satisfaction</div>
-                        </div>
-                    </div>
+                    {/*<div className="grid grid-cols-3 gap-4 sm:gap-8 max-w-md mx-auto mb-16">*/}
+                    {/*    <div className="text-center">*/}
+                    {/*        <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">1K+</div>*/}
+                    {/*        <div className="text-sm text-muted-foreground">Articles Saved</div>*/}
+                    {/*    </div>*/}
+                    {/*    <div className="text-center">*/}
+                    {/*        <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">50+</div>*/}
+                    {/*        <div className="text-sm text-muted-foreground">Active Users</div>*/}
+                    {/*    </div>*/}
+                    {/*    <div className="text-center">*/}
+                    {/*        <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">99%</div>*/}
+                    {/*        <div className="text-sm text-muted-foreground">Satisfaction</div>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                 </div>
             </section>
 
