@@ -1,6 +1,6 @@
 'use client'
 
-import {useState, useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {createClient} from '@/lib/supabase/client'
 import {Button} from '@/components/ui/button'
@@ -9,7 +9,14 @@ import {Input} from '@/components/ui/input'
 import {Label} from '@/components/ui/label'
 import {Badge} from '@/components/ui/badge'
 import {HugeiconsIcon} from '@hugeicons/react'
-import {ArrowRight01Icon, BoatIcon, Loading02Icon, SquareLock02Icon, UserIcon} from '@hugeicons/core-free-icons'
+import {
+    ArrowRight01Icon,
+    BoatIcon,
+    GoogleIcon,
+    Loading02Icon,
+    SquareLock02Icon,
+    UserIcon
+} from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 
 export default function LoginPage() {
@@ -24,7 +31,7 @@ export default function LoginPage() {
     // Check if user is already logged in
     useEffect(() => {
         const checkAuth = async () => {
-            const { data: { session } } = await supabase.auth.getSession()
+            const {data: {session}} = await supabase.auth.getSession()
             if (session) {
                 router.push('/app')
                 return
@@ -58,11 +65,34 @@ export default function LoginPage() {
         }
     }
 
+    const handleGoogleLogin = async () => {
+        setLoading(true)
+        setError('')
+
+        try {
+            const {error} = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: `${window.location.origin}/auth/callback`
+                }
+            })
+
+            if (error) {
+                setError(error.message)
+                setLoading(false)
+            }
+        } catch {
+            setError('An unexpected error occurred')
+            setLoading(false)
+        }
+    }
+
     // Show loading while checking auth
     if (checking) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background flex items-center justify-center">
-                <HugeiconsIcon icon={Loading02Icon} size={32} className="mr-2 animate-spin text-primary" />
+            <div
+                className="min-h-screen bg-gradient-to-br from-background via-secondary to-background flex items-center justify-center">
+                <HugeiconsIcon icon={Loading02Icon} size={32} className="mr-2 animate-spin text-primary"/>
             </div>
         )
     }
@@ -106,6 +136,26 @@ export default function LoginPage() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="w-full h-12 border-border/60 bg-background/50 hover:bg-background/80"
+                                onClick={handleGoogleLogin}
+                                disabled={loading}
+                            >
+                                <HugeiconsIcon icon={GoogleIcon} size={20} className="mr-2"/>
+                                Sign in with Google
+                            </Button>
+
+                            <div className="relative my-6">
+                                <div className="absolute inset-0 flex items-center">
+                                    <span className="w-full border-t border-border/60"/>
+                                </div>
+                                <div className="relative flex justify-center text-xs uppercase">
+                                    <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                                </div>
+                            </div>
+
                             <form onSubmit={handleLogin} className="space-y-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="email" className="text-sm font-medium">
@@ -177,6 +227,7 @@ export default function LoginPage() {
                                     )}
                                 </Button>
                             </form>
+
 
                             <div className="text-center pt-4 border-t border-border/60">
                                 <p className="text-sm text-muted-foreground">

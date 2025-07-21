@@ -1,6 +1,6 @@
 'use client'
 
-import {useState, useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {createClient} from '@/lib/supabase/client'
 import {Button} from '@/components/ui/button'
@@ -12,7 +12,9 @@ import {HugeiconsIcon} from '@hugeicons/react'
 import {
     ArrowRight01Icon,
     BoatIcon,
-    CheckmarkCircle02Icon, Loading02Icon,
+    CheckmarkCircle02Icon,
+    GoogleIcon,
+    Loading02Icon,
     Mail01Icon,
     SquareLock02Icon,
     UserIcon
@@ -34,7 +36,7 @@ export default function RegisterPage() {
     // Check if user is already logged in
     useEffect(() => {
         const checkAuth = async () => {
-            const { data: { session } } = await supabase.auth.getSession()
+            const {data: {session}} = await supabase.auth.getSession()
             if (session) {
                 router.push('/app')
                 return
@@ -88,11 +90,34 @@ export default function RegisterPage() {
         }
     }
 
+    const handleGoogleRegister = async () => {
+        setLoading(true)
+        setError('')
+
+        try {
+            const {error} = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: `${window.location.origin}/auth/callback`
+                }
+            })
+
+            if (error) {
+                setError(error.message)
+                setLoading(false)
+            }
+        } catch {
+            setError('An unexpected error occurred')
+            setLoading(false)
+        }
+    }
+
     // Show loading while checking auth
     if (checking) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background flex items-center justify-center">
-                <HugeiconsIcon icon={Loading02Icon} size={32} className="mr-2 animate-spin text-primary" />
+            <div
+                className="min-h-screen bg-gradient-to-br from-background via-secondary to-background flex items-center justify-center">
+                <HugeiconsIcon icon={Loading02Icon} size={32} className="mr-2 animate-spin text-primary"/>
             </div>
         )
     }
@@ -154,121 +179,146 @@ export default function RegisterPage() {
                                     </div>
                                 </div>
                             ) : (
-                                <form onSubmit={handleRegister} className="space-y-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="displayName" className="text-sm font-medium">
-                                            Display Name
-                                        </Label>
-                                        <div className="relative">
-                                            <HugeiconsIcon
-                                                icon={UserIcon}
-                                                size={20}
-                                                className="absolute left-3 top-3 text-muted-foreground"
-                                            />
-                                            <Input
-                                                id="displayName"
-                                                type="text"
-                                                placeholder="Enter your display name (optional)"
-                                                value={displayName}
-                                                onChange={(e) => setDisplayName(e.target.value)}
-                                                className="pl-10 h-12 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="email" className="text-sm font-medium">
-                                            Email Address
-                                        </Label>
-                                        <div className="relative">
-                                            <HugeiconsIcon
-                                                icon={Mail01Icon}
-                                                size={20}
-                                                className="absolute left-3 top-3 text-muted-foreground"
-                                            />
-                                            <Input
-                                                id="email"
-                                                type="email"
-                                                placeholder="Enter your email"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                className="pl-10 h-12 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="password" className="text-sm font-medium">
-                                            Password
-                                        </Label>
-                                        <div className="relative">
-                                            <HugeiconsIcon
-                                                icon={SquareLock02Icon}
-                                                size={20}
-                                                className="absolute left-3 top-3 text-muted-foreground"
-                                            />
-                                            <Input
-                                                id="password"
-                                                type="password"
-                                                placeholder="Create a password"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                                className="pl-10 h-12 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="confirmPassword" className="text-sm font-medium">
-                                            Confirm Password
-                                        </Label>
-                                        <div className="relative">
-                                            <HugeiconsIcon
-                                                icon={SquareLock02Icon}
-                                                size={20}
-                                                className="absolute left-3 top-3 text-muted-foreground"
-                                            />
-                                            <Input
-                                                id="confirmPassword"
-                                                type="password"
-                                                placeholder="Confirm your password"
-                                                value={confirmPassword}
-                                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                                className="pl-10 h-12 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {error && (
-                                        <div
-                                            className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg">
-                                            {error}
-                                        </div>
-                                    )}
-
+                                <>
                                     <Button
-                                        type="submit"
-                                        className="w-full h-12 bg-primary text-white hover:bg-primary/90 shadow-lg font-medium"
+                                        type="button"
+                                        variant="outline"
+                                        className="w-full h-12 border-border/60 bg-background/50 hover:bg-background/80"
+                                        onClick={handleGoogleRegister}
                                         disabled={loading}
                                     >
-                                        {loading ? (
-                                            <>
-                                                <div
-                                                    className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                                Creating account...
-                                            </>
-                                        ) : (
-                                            <>
-                                                Create Account
-                                                <HugeiconsIcon icon={ArrowRight01Icon} size={16} className="ml-2"/>
-                                            </>
-                                        )}
+                                        <HugeiconsIcon icon={GoogleIcon} size={20} className="mr-2"/>
+                                        Sign up with Google
                                     </Button>
-                                </form>
+
+                                    <div className="relative my-6">
+                                        <div className="absolute inset-0 flex items-center">
+                                            <span className="w-full border-t border-border/60"/>
+                                        </div>
+                                        <div className="relative flex justify-center text-xs uppercase">
+                                            <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                                        </div>
+                                    </div>
+
+                                    <form onSubmit={handleRegister} className="space-y-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="displayName" className="text-sm font-medium">
+                                                Display Name
+                                            </Label>
+                                            <div className="relative">
+                                                <HugeiconsIcon
+                                                    icon={UserIcon}
+                                                    size={20}
+                                                    className="absolute left-3 top-3 text-muted-foreground"
+                                                />
+                                                <Input
+                                                    id="displayName"
+                                                    type="text"
+                                                    placeholder="Enter your display name (optional)"
+                                                    value={displayName}
+                                                    onChange={(e) => setDisplayName(e.target.value)}
+                                                    className="pl-10 h-12 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="email" className="text-sm font-medium">
+                                                Email Address
+                                            </Label>
+                                            <div className="relative">
+                                                <HugeiconsIcon
+                                                    icon={Mail01Icon}
+                                                    size={20}
+                                                    className="absolute left-3 top-3 text-muted-foreground"
+                                                />
+                                                <Input
+                                                    id="email"
+                                                    type="email"
+                                                    placeholder="Enter your email"
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    className="pl-10 h-12 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20"
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="password" className="text-sm font-medium">
+                                                Password
+                                            </Label>
+                                            <div className="relative">
+                                                <HugeiconsIcon
+                                                    icon={SquareLock02Icon}
+                                                    size={20}
+                                                    className="absolute left-3 top-3 text-muted-foreground"
+                                                />
+                                                <Input
+                                                    id="password"
+                                                    type="password"
+                                                    placeholder="Create a password"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    className="pl-10 h-12 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20"
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="confirmPassword" className="text-sm font-medium">
+                                                Confirm Password
+                                            </Label>
+                                            <div className="relative">
+                                                <HugeiconsIcon
+                                                    icon={SquareLock02Icon}
+                                                    size={20}
+                                                    className="absolute left-3 top-3 text-muted-foreground"
+                                                />
+                                                <Input
+                                                    id="confirmPassword"
+                                                    type="password"
+                                                    placeholder="Confirm your password"
+                                                    value={confirmPassword}
+                                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                                    className="pl-10 h-12 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20"
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {error && (
+                                            <div
+                                                className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg">
+                                                {error}
+                                            </div>
+                                        )}
+
+                                        <Button
+                                            type="submit"
+                                            className="w-full h-12 bg-primary text-white hover:bg-primary/90 shadow-lg font-medium"
+                                            disabled={loading}
+                                        >
+                                            {loading ? (
+                                                <>
+                                                    <div
+                                                        className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                                    Creating account...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    Create Account
+                                                    <HugeiconsIcon icon={ArrowRight01Icon} size={16} className="ml-2"/>
+                                                </>
+                                            )}
+                                        </Button>
+                                    </form>
+
+
+                                </>
                             )}
+
 
                             {!success && (
                                 <div className="text-center pt-4 border-t border-border/60">
