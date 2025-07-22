@@ -13,6 +13,7 @@ import DashboardRecentPost from '@/components/dashboard-recent-post'
 import {User} from "@/types/user";
 import {BlogPostStats} from "@/types/stats";
 import DashboardAddBlogButton from "@/components/dashboard-add-blog-button";
+import {MobileRefreshButton} from "@/components/mobile-refresh-button";
 import {cookies} from "next/headers";
 
 export default async function Page() {
@@ -46,7 +47,7 @@ export default async function Page() {
     return (
         <div className="space-y-8">
             {/* Welcome Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-start justify-between">
                 <div>
                     <div className="flex items-center space-x-3 mb-2">
                         <h1 className="text-2xl font-bold text-foreground">
@@ -57,6 +58,7 @@ export default async function Page() {
                         Ready to discover something new today?
                     </p>
                 </div>
+                <MobileRefreshButton />
             </div>
 
             {/* Stats Grid */}

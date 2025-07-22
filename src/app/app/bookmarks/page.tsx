@@ -9,6 +9,7 @@ import ArticleSearchBox from "@/components/article-search-box";
 import ArticleViewModeChange from "@/components/article-view-mode-change";
 import {BlogPostsResponse} from "@/types/responses";
 import ArticlePagination from "@/components/article-pagination";
+import {MobileRefreshButton} from "@/components/mobile-refresh-button";
 
 type PageProps = {
     page?: string;
@@ -41,13 +42,14 @@ export default async function Page(props: { searchParams: Promise<PageProps> }) 
         <div className="space-y-6">
             {/* Header */}
             <div className="flex flex-col space-y-4">
-                <div className="flex items-center justify-between">
+                <div className="flex items-start justify-between">
                     <div>
                         <h1 className="text-2xl font-bold text-foreground">Bookmarks</h1>
                         <p className="text-sm text-muted-foreground">
                             Your saved articles for later reading
                         </p>
                     </div>
+                    <MobileRefreshButton />
                 </div>
 
                 <div className={"flex gap-2 items-center"}>
