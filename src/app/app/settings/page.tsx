@@ -6,6 +6,7 @@ import ProfileEditForm from '@/components/profile-edit-form'
 import {ThemeToggle} from '@/components/theme-toggle'
 import {DeleteAccountDialog} from '@/components/delete-account-dialog'
 import packageJson from '../../../../package.json'
+import AppTitle from "@/components/app-title";
 
 export default async function SettingsPage() {
     const supabase = await createClient()
@@ -17,13 +18,7 @@ export default async function SettingsPage() {
 
     return (
         <div className="space-y-8">
-            {/* Header */}
-            <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Settings</h1>
-                <p className="text-muted-foreground">
-                    Manage your account settings and preferences
-                </p>
-            </div>
+            <AppTitle title={"Settings"} subtitle={" Manage your account settings and preferences"}/>
 
             {/* Account Section */}
             <div className="space-y-6">

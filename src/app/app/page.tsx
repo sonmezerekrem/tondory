@@ -13,8 +13,8 @@ import DashboardRecentPost from '@/components/dashboard-recent-post'
 import {User} from "@/types/user";
 import {BlogPostStats} from "@/types/stats";
 import DashboardAddBlogButton from "@/components/dashboard-add-blog-button";
-import {MobileRefreshButton} from "@/components/mobile-refresh-button";
 import {cookies} from "next/headers";
+import AppTitle from "@/components/app-title";
 
 export default async function Page() {
     const cookieStore = await cookies()
@@ -29,7 +29,7 @@ export default async function Page() {
         }).then(res => res.json())
 
     const stats: BlogPostStats = await fetch(
-        `${process.env.BACKEND_URL}/api/blog-posts/stats?timezone=UTC`, {
+        `${process.env.BACKEND_URL}/api/daily-stats?timezone=UTC`, {
             cache: "no-store",
             headers: {
                 Cookie: cookieStore.toString(),
@@ -46,20 +46,9 @@ export default async function Page() {
 
     return (
         <div className="space-y-8">
-            {/* Welcome Header */}
-            <div className="flex items-start justify-between">
-                <div>
-                    <div className="flex items-center space-x-3 mb-2">
-                        <h1 className="text-2xl font-bold text-foreground">
-                            {getTimeGreeting()},  {user.name || user.email?.split('@')[0] || 'Reader'}!
-                        </h1>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                        Ready to discover something new today?
-                    </p>
-                </div>
-                <MobileRefreshButton />
-            </div>
+            <AppTitle title={`${getTimeGreeting()},  ${user.name || user.email?.split('@')[0] || 'Reader'}!`}
+                      subtitle={"Ready to discover something new today?"}
+            />
 
             {/* Stats Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
