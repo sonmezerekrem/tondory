@@ -29,7 +29,7 @@ export default async function Page() {
         }).then(res => res.json())
 
     const stats: BlogPostStats = await fetch(
-        `${process.env.BACKEND_URL}/api/blog-posts/stats`, {
+        `${process.env.BACKEND_URL}/api/blog-posts/stats?timezone=UTC`, {
             cache: "no-store",
             headers: {
                 Cookie: cookieStore.toString(),

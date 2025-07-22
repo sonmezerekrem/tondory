@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { getCurrentDateInTimezone } from '@/lib/timezone'
 
 export async function GET(request: NextRequest) {
   try {
@@ -89,10 +90,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { url, title, description, image_url, site_name, read_date } = await request.json()
+    const { url, title, description, image_url, site_name, read_date, timezone } = await request.json()
 
     if (!url) {
       return NextResponse.json({ error: 'URL is required' }, { status: 400 })
+    }
+
+    // Handle timezone-aware date
+    let finalReadDate = read_date
+    if (!finalReadDate) {
+      if (timezone) {
+        finalReadDate = getCurrentDateInTimezone(timezone)
+      } else {
+        // Fallback to UTC date
+        finalReadDate = new Date().toISOString().split('T')[0]
+      }
     }
 
     const { data, error } = await supabase
@@ -105,7 +117,7 @@ export async function POST(request: NextRequest) {
           description,
           image_url,
           site_name,
-          read_date: read_date || new Date().toISOString().split('T')[0],
+          read_date: finalReadDate,
         },
       ])
       .select()

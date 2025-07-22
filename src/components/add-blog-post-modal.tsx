@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Link02Icon, Calendar01Icon, Loading02Icon } from '@hugeicons/core-free-icons'
+import { getCurrentLocalDateString, getUserTimezone } from '@/lib/timezone'
 
 interface BlogPost {
   id: string
@@ -35,7 +36,7 @@ interface AddBlogPostModalProps {
 
 export function AddBlogPostModal({ isOpen, onClose, onPostAdded }: AddBlogPostModalProps) {
   const [url, setUrl] = useState('')
-  const [readDate, setReadDate] = useState(new Date().toISOString().split('T')[0])
+  const [readDate, setReadDate] = useState(() => getCurrentLocalDateString())
   const [ogData, setOgData] = useState<OpenGraphData | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
@@ -98,6 +99,7 @@ export function AddBlogPostModal({ isOpen, onClose, onPostAdded }: AddBlogPostMo
           image_url: ogData?.image || '',
           site_name: ogData?.siteName || '',
           read_date: readDate,
+          timezone: getUserTimezone(),
         }),
       })
 
@@ -118,7 +120,7 @@ export function AddBlogPostModal({ isOpen, onClose, onPostAdded }: AddBlogPostMo
 
   const handleClose = () => {
     setUrl('')
-    setReadDate(new Date().toISOString().split('T')[0])
+    setReadDate(getCurrentLocalDateString())
     setOgData(null)
     setError('')
     onClose()
