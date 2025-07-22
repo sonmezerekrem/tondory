@@ -39,6 +39,7 @@ export async function GET() {
       .select('id, title, site_name, read_date, image_url, url')
       .eq('user_id', user.id)
       .order('read_date', { ascending: false })
+      .order('created_at', { ascending: false })
       .limit(5)
 
     // Get bookmarks count

@@ -36,6 +36,7 @@ export async function GET(request: NextRequest) {
     // Add pagination and ordering
     query = query
       .order('read_date', { ascending: false })
+      .order('created_at', { ascending: false })
       .range(offset, offset + size - 1)
 
     const { data, error } = await query
