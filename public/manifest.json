@@ -2,7 +2,7 @@
   "name": "Tondory - Blog Reading Tracker",
   "short_name": "Tondory",
   "description": "Track, organize, and bookmark your favorite blog posts and articles",
-  "start_url": "/",
+  "start_url": "/app",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
@@ -85,5 +85,5 @@
         }
       ]
     }
-  ],
+  ]
 }
