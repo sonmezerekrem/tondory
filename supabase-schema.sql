@@ -269,3 +269,171 @@ VALUES
      'feature', 'Basic dashboard', 'Basic dashboard with article listing'),
     ((SELECT id FROM release_notes WHERE version = '1.0.0'),
      'feature', 'Responsive design', 'Responsive design for mobile and desktop');
+
+
+-- Create daily_stats table
+CREATE TABLE daily_stats (
+                             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                             created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                             updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                             user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+                             blog_count INTEGER DEFAULT 0,
+                             daily_date DATE NOT NULL,
+                             UNIQUE(user_id, daily_date)
+);
+
+-- Create indexes for performance
+CREATE INDEX idx_daily_stats_user_id ON daily_stats(user_id);
+CREATE INDEX idx_daily_stats_daily_date ON daily_stats(daily_date DESC);
+CREATE INDEX idx_daily_stats_user_date ON daily_stats(user_id, daily_date DESC);
+
+-- Enable RLS (Row Level Security)
+ALTER TABLE daily_stats ENABLE ROW LEVEL SECURITY;
+
+-- Create RLS policy for users to only see their own stats
+CREATE POLICY "Users can only see own daily stats" ON daily_stats
+    FOR ALL USING (auth.uid() = user_id);
+
+-- Function to update daily_stats
+CREATE OR REPLACE FUNCTION update_daily_stats(
+    p_user_id UUID,
+    p_date DATE,
+    p_increment INTEGER DEFAULT 1
+) RETURNS VOID AS $$
+BEGIN
+    INSERT INTO daily_stats (user_id, daily_date, blog_count)
+    VALUES (p_user_id, p_date, p_increment)
+    ON CONFLICT (user_id, daily_date)
+        DO UPDATE SET
+                      blog_count = daily_stats.blog_count + p_increment,
+                      updated_at = NOW();
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to populate initial data from existing blog_posts
+CREATE OR REPLACE FUNCTION populate_initial_daily_stats() RETURNS VOID AS $$
+BEGIN
+    INSERT INTO daily_stats (user_id, daily_date, blog_count)
+    SELECT
+        user_id,
+        read_date,
+        COUNT(*) as blog_count
+    FROM blog_posts
+    GROUP BY user_id, read_date
+    ON CONFLICT (user_id, daily_date) DO NOTHING;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to populate stats for a specific user (useful for API endpoint)
+CREATE OR REPLACE FUNCTION populate_user_daily_stats(p_user_id UUID) RETURNS VOID AS $$
+BEGIN
+    -- Delete existing stats for this user
+    DELETE FROM daily_stats WHERE user_id = p_user_id;
+
+    -- Recalculate from blog_posts
+    INSERT INTO daily_stats (user_id, daily_date, blog_count)
+    SELECT
+        user_id,
+        read_date,
+        COUNT(*) as blog_count
+    FROM blog_posts
+    WHERE user_id = p_user_id
+    GROUP BY user_id, read_date;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to verify data consistency between daily_stats and blog_posts
+CREATE OR REPLACE FUNCTION verify_daily_stats_consistency(p_user_id UUID)
+    RETURNS TABLE(
+                     daily_date DATE,
+                     stats_count INTEGER,
+                     actual_count BIGINT,
+                     difference INTEGER
+                 ) AS $$
+BEGIN
+    RETURN QUERY
+        SELECT
+            COALESCE(ds.daily_date, bp.read_date) as daily_date,
+            COALESCE(ds.blog_count, 0) as stats_count,
+            COALESCE(bp.actual_count, 0) as actual_count,
+            (COALESCE(ds.blog_count, 0) - COALESCE(bp.actual_count, 0))::INTEGER as difference
+        FROM (
+                 SELECT daily_date, blog_count
+                 FROM daily_stats
+                 WHERE user_id = p_user_id
+             ) ds
+                 FULL OUTER JOIN (
+            SELECT read_date, COUNT(*) as actual_count
+            FROM blog_posts
+            WHERE user_id = p_user_id
+            GROUP BY read_date
+        ) bp ON ds.daily_date = bp.read_date
+        WHERE COALESCE(ds.blog_count, 0) != COALESCE(bp.actual_count, 0)
+        ORDER BY daily_date DESC;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger function to update daily_stats when blog_posts are inserted
+CREATE OR REPLACE FUNCTION trigger_update_daily_stats_on_insert()
+    RETURNS TRIGGER AS $$
+BEGIN
+    PERFORM update_daily_stats(NEW.user_id, NEW.read_date, 1);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger function to update daily_stats when blog_posts are deleted
+CREATE OR REPLACE FUNCTION trigger_update_daily_stats_on_delete()
+    RETURNS TRIGGER AS $$
+BEGIN
+    PERFORM update_daily_stats(OLD.user_id, OLD.read_date, -1);
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger function to update daily_stats when blog_posts read_date is updated
+CREATE OR REPLACE FUNCTION trigger_update_daily_stats_on_update()
+    RETURNS TRIGGER AS $$
+BEGIN
+    -- If read_date changed, update both old and new dates
+    IF OLD.read_date != NEW.read_date THEN
+        -- Decrease count for old date
+        PERFORM update_daily_stats(OLD.user_id, OLD.read_date, -1);
+        -- Increase count for new date
+        PERFORM update_daily_stats(NEW.user_id, NEW.read_date, 1);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create triggers
+CREATE TRIGGER trigger_blog_posts_insert_daily_stats
+    AFTER INSERT ON blog_posts
+    FOR EACH ROW EXECUTE FUNCTION trigger_update_daily_stats_on_insert();
+
+CREATE TRIGGER trigger_blog_posts_delete_daily_stats
+    AFTER DELETE ON blog_posts
+    FOR EACH ROW EXECUTE FUNCTION trigger_update_daily_stats_on_delete();
+
+CREATE TRIGGER trigger_blog_posts_update_daily_stats
+    AFTER UPDATE ON blog_posts
+    FOR EACH ROW EXECUTE FUNCTION trigger_update_daily_stats_on_update();
+
+-- Update timestamp trigger
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+    RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_daily_stats_updated_at
+    BEFORE UPDATE ON daily_stats
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Populate initial data (run this after creating the table)
+SELECT populate_initial_daily_stats();
+
+-- Optional: Clean up zero counts (remove entries where blog_count = 0)
+DELETE FROM daily_stats WHERE blog_count <= 0;
