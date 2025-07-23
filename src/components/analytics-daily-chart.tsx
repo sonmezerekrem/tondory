@@ -87,7 +87,7 @@ export default function AnalyticsDailyChart() {
     const {chartData, summary} = data
 
     return (
-        <Card>
+        <Card className="overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <div className="space-y-1">
                     <CardTitle className="text-base font-medium">Daily Reading Activity</CardTitle>
@@ -113,14 +113,15 @@ export default function AnalyticsDailyChart() {
           </span>
                 </div>
             </CardHeader>
-            <CardContent>
-                <ChartContainer config={chartConfig} className="h-[300px] w-full">
+            <CardContent className="overflow-hidden p-3 sm:p-6">
+                <div className="w-full overflow-hidden">
+                    <ChartContainer config={chartConfig} className="h-[200px] sm:h-[250px] lg:h-[300px] w-full min-w-0">
                     <BarChart
                         data={chartData}
                         margin={{
                             top: 20,
-                            right: 30,
-                            left: 20,
+                            right: 0,
+                            left: 0,
                             bottom: 5,
                         }}
                     >
@@ -166,7 +167,8 @@ export default function AnalyticsDailyChart() {
                             radius={[4, 4, 0, 0]}
                         />
                     </BarChart>
-                </ChartContainer>
+                    </ChartContainer>
+                </div>
                 <div className="flex items-center pt-4 text-sm text-muted-foreground">
                     <HugeiconsIcon
                         icon={summary.isPositive ? ChartIncreaseIcon : ChartDecreaseIcon}
