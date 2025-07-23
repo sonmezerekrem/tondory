@@ -34,7 +34,7 @@ export default async function Page(props: { searchParams: Promise<PageProps> }) 
             </div>
 
             {/* Content */}
-            <ArticleList page={currentPage} size={pageSize} view={viewMode} search={searchStr}/>
+            <ArticleList page={currentPage} size={pageSize} view={viewMode} search={searchStr} endpoint={"bookmarks"}/>
 
         </div>
     )

@@ -13,13 +13,14 @@ type PageProps = {
     size: number;
     view: 'list' | 'grid';
     search: string;
+    endpoint: string;
 }
 
-export default async function ArticleList({page, size, view, search}: PageProps) {
+export default async function ArticleList({page, size, view, search, endpoint}: PageProps) {
     const cookieStore = await cookies()
 
     const response: BlogPostsResponse = await fetch(
-        `${process.env.BACKEND_URL}/api/blog-posts?page=${page}&size=${size}&search=${search}`, {
+        `${process.env.BACKEND_URL}/api/${endpoint}?page=${page}&size=${size}&search=${search}`, {
             headers: {
                 Cookie: cookieStore.toString(),
                 'Content-Type': 'application/json',
