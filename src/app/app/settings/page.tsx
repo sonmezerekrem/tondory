@@ -1,6 +1,6 @@
 import {Button} from '@/components/ui/button'
 import {HugeiconsIcon} from '@hugeicons/react'
-import {InformationCircleIcon, Logout01Icon, Settings02Icon, User02Icon} from '@hugeicons/core-free-icons'
+import {Logout01Icon} from '@hugeicons/core-free-icons'
 import {createClient} from '@/lib/supabase/server'
 import ProfileEditForm from '@/components/profile-edit-form'
 import {ThemeToggle} from '@/components/theme-toggle'
@@ -24,7 +24,7 @@ export default async function SettingsPage() {
             <div className="space-y-6 pt-4 border-t">
                 <div className="flex items-center space-x-3">
                     <div>
-                        <h2 className="text-lg font-semibold text-foreground">Account Information</h2>
+                        <h2 className="text-lg font-semibold text-primary">Account Information</h2>
                         <p className="text-sm text-muted-foreground">Your account details and preferences</p>
                     </div>
                 </div>
@@ -62,7 +62,7 @@ export default async function SettingsPage() {
             <div className="space-y-6 pt-4 border-t">
                 <div className="flex items-center space-x-3">
                     <div>
-                        <h2 className="text-lg font-semibold text-foreground">Preferences</h2>
+                        <h2 className="text-lg font-semibold text-primary">Preferences</h2>
                         <p className="text-sm text-muted-foreground">Customize your reading experience</p>
                     </div>
                 </div>
@@ -77,7 +77,7 @@ export default async function SettingsPage() {
             {/* Account Actions Section */}
             <div className="space-y-6 pt-4 border-t border-border/60">
                 <div>
-                    <h2 className="text-lg font-semibold text-foreground">Account Actions</h2>
+                    <h2 className="text-lg font-semibold text-primary">Account Actions</h2>
                     <p className="text-sm text-muted-foreground">Manage your session and account</p>
                 </div>
 
@@ -119,16 +119,13 @@ export default async function SettingsPage() {
             {/* Version Information */}
             <div className="space-y-6 pt-4 border-t border-border/60">
                 <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-muted/50 rounded-full flex items-center justify-center">
-                        <HugeiconsIcon icon={InformationCircleIcon} size={20} className="text-muted-foreground"/>
-                    </div>
                     <div>
                         <h2 className="text-lg font-semibold text-foreground">App Information</h2>
                         <p className="text-sm text-muted-foreground">Version and build details</p>
                     </div>
                 </div>
 
-                <div className="pl-13 space-y-4">
+                <div className="pb-10 space-y-4">
                     <div className="flex flex-col space-y-3">
                         <div className="flex justify-between items-center">
                             <span className="text-sm font-medium text-foreground">Version</span>
