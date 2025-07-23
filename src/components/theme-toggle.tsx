@@ -35,7 +35,7 @@ export function ThemeToggle() {
         <span className="text-sm font-medium text-foreground">Theme</span>
         <p className="text-xs text-muted-foreground">Choose your preferred color scheme</p>
       </div>
-      <div className="flex rounded-md border border-border bg-background">
+      <div className="flex rounded-md border border-border bg-background grid grid-cols-3">
         {themes.map((themeOption) => (
           <Button
             key={themeOption.value}
