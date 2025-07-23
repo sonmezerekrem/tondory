@@ -5,8 +5,8 @@ import {
     AddCircleIcon,
     Bookmark02Icon,
     BookOpen01Icon,
-    DashboardSquare02Icon,
-    Settings02Icon
+    ChartIncreaseIcon,
+    DashboardSquare02Icon
 } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
@@ -37,10 +37,9 @@ const navigation = [
         icon: Bookmark02Icon
     },
     {
-        name: 'Settings',
-        href: '/app/settings',
-        icon: Settings02Icon,
-        disabled: false
+        name: 'Analytics',
+        href: '/app/analytics',
+        icon: ChartIncreaseIcon
     },
 ]
 
@@ -62,7 +61,6 @@ export function MobileBottomNav() {
                             <div key={item.name} className="flex-1">
                                 <button
                                     onClick={() => openAddBlogPostModal()}
-                                    disabled={item.disabled}
                                     className={cn(
                                         "flex flex-col items-center space-y-1 h-auto py-2 w-full transition-colors",
                                         "text-muted-foreground hover:text-foreground"
@@ -89,9 +87,8 @@ export function MobileBottomNav() {
 
                     return (
                         <Link key={item.name}
-                              href={item.disabled ? "#" : item.href} className="flex-1">
+                              href={item.href} className="flex-1">
                             <button
-                                disabled={item.disabled}
                                 className={cn(
                                     "flex flex-col items-center space-y-1 h-auto py-2 w-full transition-colors",
                                     isActive

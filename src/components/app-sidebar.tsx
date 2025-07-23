@@ -32,8 +32,7 @@ const navigation = [
         name: 'Analytics',
         href: '/app/analytics',
         icon: ChartIncreaseIcon,
-        disabled: true,
-        badge: "Coming Soon"
+        badge: "New"
     },
     {
         name: 'Bookmarks',
@@ -79,10 +78,9 @@ export function AppSidebar() {
                                 : pathname.startsWith(item.href)
 
                             return (
-                                <Link key={item.name} href={item.disabled ? "#" : item.href}>
+                                <Link key={item.name} href={ item.href}>
                                     <div className={cn(
                                         "group relative cursor-pointer transition-all duration-200",
-                                        item.disabled && "opacity-50 cursor-not-allowed"
                                     )}>
                                         <div className={cn(
                                             "flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all",

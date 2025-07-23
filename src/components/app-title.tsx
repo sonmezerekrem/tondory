@@ -1,11 +1,13 @@
 import {MobileRefreshButton} from "@/components/mobile-refresh-button";
+import { ReactNode } from "react";
 
 type Props = {
     title: string,
     subtitle: string,
+    rightElement?: ReactNode,
 }
 
-export default function AppTitle({title, subtitle}: Props) {
+export default function AppTitle({title, subtitle, rightElement}: Props) {
     return (
         <div className="flex items-start justify-between">
             <div>
@@ -14,7 +16,7 @@ export default function AppTitle({title, subtitle}: Props) {
                     {subtitle}
                 </p>
             </div>
-            <MobileRefreshButton/>
+            {rightElement || <MobileRefreshButton/>}
         </div>
     )
 }
