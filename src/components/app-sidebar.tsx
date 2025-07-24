@@ -1,12 +1,10 @@
 'use client'
 
 import {Button} from '@/components/ui/button'
-import {Badge} from '@/components/ui/badge'
 import {HugeiconsIcon} from '@hugeicons/react'
 import {
     Bookmark02Icon,
     BookOpen01Icon,
-    ChartIncreaseIcon,
     DashboardSquare02Icon,
     PlusSignIcon,
     Settings02Icon
@@ -27,12 +25,6 @@ const navigation = [
         name: 'Articles',
         href: '/app/articles',
         icon: BookOpen01Icon,
-    },
-    {
-        name: 'Analytics',
-        href: '/app/analytics',
-        icon: ChartIncreaseIcon,
-        badge: "New"
     },
     {
         name: 'Bookmarks',
@@ -78,7 +70,7 @@ export function AppSidebar() {
                                 : pathname.startsWith(item.href)
 
                             return (
-                                <Link key={item.name} href={ item.href}>
+                                <Link key={item.name} href={item.href}>
                                     <div className={cn(
                                         "group relative cursor-pointer transition-all duration-200",
                                     )}>
@@ -107,12 +99,6 @@ export function AppSidebar() {
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center justify-between">
                                                         <span className="font-medium text-sm">{item.name}</span>
-                                                        {item.badge && (
-                                                            <Badge variant="secondary"
-                                                                   className="bg-accent/10 text-accent text-xs">
-                                                                {item.badge}
-                                                            </Badge>
-                                                        )}
                                                     </div>
                                                 </div>
                                             }
@@ -122,21 +108,6 @@ export function AppSidebar() {
                             )
                         })}
                     </nav>
-
-                    {/* Collapse Button */}
-                    {/* <div className="p-4 border-t border-border/30">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="w-full justify-center h-10 text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-xl transition-all"
-              onClick={() => setIsCollapsed(!isCollapsed)}
-            >
-              <HugeiconsIcon
-                icon={isCollapsed ? ArrowRight01Icon : ArrowLeft01Icon}
-                size={16}
-              />
-            </Button>
-          </div> */}
                 </div>
             </aside>
 

@@ -37,11 +37,6 @@ const navigation = [
         icon: Bookmark02Icon
     },
     {
-        name: 'Analytics',
-        href: '/app/analytics',
-        icon: ChartIncreaseIcon
-    },
-    {
         name: 'Settings',
         href: '/app/settings',
         icon: Settings02Icon

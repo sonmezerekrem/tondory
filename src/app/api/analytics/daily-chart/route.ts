@@ -53,43 +53,8 @@ export async function GET(request: NextRequest) {
                 })
             }
         })
-
-        // Calculate trend
-        const totalCount = chartData.reduce((sum, day) => sum + day.count, 0)
-        const lastWeekStart = new Date(today)
-        lastWeekStart.setDate(today.getDate() - 13)
-        const lastWeekEnd = new Date(today)
-        lastWeekEnd.setDate(today.getDate() - 7)
-
-        const lastWeekDates = []
-        for (let i = 6; i >= 0; i--) {
-            const date = new Date(lastWeekEnd)
-            date.setDate(lastWeekEnd.getDate() - i)
-            lastWeekDates.push(date.toISOString().split('T')[0])
-        }
-
-        const {data: lastWeekData} = await supabase
-            .from('daily_stats')
-            .select('blog_count')
-            .eq('user_id', user.id)
-            .in('daily_date', lastWeekDates)
-
-        const lastWeekTotal = lastWeekData?.reduce((sum, stat) => sum + stat.blog_count, 0) || 0
-
-        let trendPercentage = 0
-        if (lastWeekTotal > 0) {
-            trendPercentage = ((totalCount - lastWeekTotal) / lastWeekTotal) * 100
-        } else if (totalCount > 0) {
-            trendPercentage = 100 // New activity where there was none before
-        }
-
         return NextResponse.json({
             chartData,
-            summary: {
-                totalCount,
-                trendPercentage: Math.round(trendPercentage * 10) / 10,
-                isPositive: trendPercentage >= 0
-            }
         })
     } catch (error) {
         console.error('Daily chart API error:', error)

@@ -15,6 +15,8 @@ import {BlogPostStats} from "@/types/stats";
 import DashboardAddBlogButton from "@/components/dashboard-add-blog-button";
 import {cookies} from "next/headers";
 import AppTitle from "@/components/app-title";
+import AnalyticsDailyChart from "@/components/analytics-daily-chart";
+import {ChartResponse} from "@/types/chart-data";
 
 export default async function Page() {
     const cookieStore = await cookies()
@@ -37,6 +39,16 @@ export default async function Page() {
             },
         }).then(res => res.json())
 
+    const chartData: ChartResponse = await fetch(
+        `${process.env.BACKEND_URL}/api/analytics/daily-chart?timezone=UTC`, {
+            cache: "no-store",
+            headers: {
+                Cookie: cookieStore.toString(),
+                'Content-Type': 'application/json',
+            },
+        }).then(res => res.json())
+
+
     const getTimeGreeting = () => {
         const hour = new Date().getHours()
         if (hour < 12) return 'Good morning'
@@ -50,17 +62,27 @@ export default async function Page() {
                       subtitle={"Ready to discover something new today?"}
             />
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <DashboardStatCard title={"Total Articles"} subtitle={"Your reading collection"} icon={BookOpen01Icon}
-                                   data={stats?.total || 0}/>
-                <DashboardStatCard title={"This Month"} subtitle={"Articles read"} icon={Calendar01Icon}
-                                   data={stats?.thisMonth || 0}/>
-                <DashboardStatCard title={"This Week"} subtitle={"Recent activity"} icon={ChartIncreaseIcon}
-                                   data={stats?.thisWeek || 0}/>
-                <DashboardStatCard title={"Bookmarks"} subtitle={"Saved articles"} icon={BookmarkAdd01Icon}
-                                   data={stats?.bookmarks || 0}/>
+
+            <div className="space-y-8 grid  sm:grid-cols-3 gap-3">
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2  gap-4 order-2 sm:order-1">
+                    <DashboardStatCard title={"Total Articles"} subtitle={"Your reading collection"}
+                                       icon={BookOpen01Icon}
+                                       data={stats?.total || 0}/>
+                    <DashboardStatCard title={"This Month"} subtitle={"Articles read"} icon={Calendar01Icon}
+                                       data={stats?.thisMonth || 0}/>
+                    <DashboardStatCard title={"This Week"} subtitle={"Recent activity"} icon={ChartIncreaseIcon}
+                                       data={stats?.thisWeek || 0}/>
+                    <DashboardStatCard title={"Bookmarks"} subtitle={"Saved articles"} icon={BookmarkAdd01Icon}
+                                       data={stats?.bookmarks || 0}/>
+                </div>
+
+                {/* Daily Reading Chart */}
+                <div className={"sm:col-span-2 order-1 sm:order-2 "}>
+                    <AnalyticsDailyChart data={chartData}/>
+                </div>
             </div>
+
 
             {/* Recent Articles Section */}
             <div className="space-y-4">
