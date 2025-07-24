@@ -6,7 +6,7 @@ import {
     Bookmark02Icon,
     BookOpen01Icon,
     ChartIncreaseIcon,
-    DashboardSquare02Icon
+    DashboardSquare02Icon, Settings02Icon
 } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
@@ -40,6 +40,11 @@ const navigation = [
         name: 'Analytics',
         href: '/app/analytics',
         icon: ChartIncreaseIcon
+    },
+    {
+        name: 'Settings',
+        href: '/app/settings',
+        icon: Settings02Icon
     },
 ]
 
