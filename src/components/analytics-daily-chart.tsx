@@ -36,7 +36,7 @@ export default function AnalyticsDailyChart({data}: Props) {
     const {chartData} = data
 
     return (
-        <Card className="overflow-hidden p-0 border-none shadow-none rounded-none">
+        <Card className="overflow-hidden p-0 border-none shadow-none rounded-none bg-transparent">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0 pb-2">
                 <div className="space-y-1">
                     <CardTitle className="text-base font-medium">Daily Reading Activity</CardTitle>
@@ -110,7 +110,7 @@ export default function AnalyticsDailyChart({data}: Props) {
                             />
                             <Bar
                                 dataKey="count"
-                                fill="var(--chart-2)"
+                                fill="var(--chart-1)"
                                 radius={[4, 4, 0, 0]}
                                 className={"border"}
                             />
