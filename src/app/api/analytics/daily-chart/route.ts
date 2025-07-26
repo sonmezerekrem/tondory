@@ -10,10 +10,6 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({error: 'Unauthorized'}, {status: 401})
         }
 
-        // Get timezone from query params or default to UTC
-        const {searchParams} = new URL(request.url)
-        const timezone = searchParams.get('timezone') || 'UTC'
-
         // Calculate date range for last 7 days
         const today = new Date()
         const last7Days = []

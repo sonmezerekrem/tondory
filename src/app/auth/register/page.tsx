@@ -14,7 +14,6 @@ import {
     BoatIcon,
     CheckmarkCircle02Icon,
     GoogleIcon,
-    Loading02Icon,
     Mail01Icon,
     SquareLock02Icon,
     UserIcon

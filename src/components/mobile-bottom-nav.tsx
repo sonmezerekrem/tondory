@@ -5,8 +5,8 @@ import {
     AddCircleIcon,
     Bookmark02Icon,
     BookOpen01Icon,
-    ChartIncreaseIcon,
-    DashboardSquare02Icon, Settings02Icon
+    DashboardSquare02Icon,
+    Settings02Icon
 } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
