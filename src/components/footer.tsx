@@ -12,6 +12,10 @@ export default function Footer() {
                     </div>
                     <span className="text-xl font-bold text-foreground">Tondory</span>
                 </div>
+
+                <div className="flex items-center justify-center space-x-3 mb-4">
+                    <a href="https://startupfa.me/s/tondory.com?utm_source=tondory.com" target="_blank"><img src="https://startupfa.me/badges/featured-badge.webp" alt="Featured on Startup Fame" width="171" height="54" /></a>
+                </div>
                 
                 {/* Footer Links */}
                 <div className="flex items-center justify-center space-x-6 mb-4 text-sm">
